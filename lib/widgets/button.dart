@@ -6,8 +6,7 @@ import 'package:flutter/material.dart';
 class Button extends StatelessWidget {
   Function callback;
   final String text;
-  Button({Key? key, required this.callback, required this.text})
-      : super(key: key);
+  Button({Key? key, required this.callback, required this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class Button extends StatelessWidget {
               blurRadius: 14,
               spreadRadius: 3,
               blurStyle: BlurStyle.normal,
-              offset: Offset(0, 3),
+              offset: Offset(1, 3),
             ),
           ],
         ),

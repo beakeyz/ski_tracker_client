@@ -20,6 +20,16 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 55),
           width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(228, 56, 39, 59),
+                Colors.black,
+              ],
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -31,17 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               SvgPicture.asset(
-                "assets/mysql-icon.svg",
+                "assets/dadjoke-icon.svg",
                 color: PRIMARY_COLOR,
-                height: 100,
+                height: 200,
               ),
               const SizedBox(height: 71),
 
               Button(
                 callback: () {
-                  if (ScreenSwitcher.gotoScreen(
-                          context, const HomeScreen(), true) ==
-                      false) {}
+                  ScreenSwitcher.gotoScreen(context, const HomeScreen(), true);
                 },
                 text: "Get going!",
               ),

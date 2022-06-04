@@ -1,9 +1,16 @@
 import 'package:dadjoke_client/constants/colors.dart';
+import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const Main());
+  runApp(
+    const Main(),
+  );
+}
+
+class App {
+  static bool greenFlag = false;
 }
 
 class Main extends StatelessWidget {
@@ -14,8 +21,7 @@ class Main extends StatelessWidget {
     return MaterialApp(
       title: "Dadjokegen client",
       debugShowCheckedModeBanner: false,
-      theme:
-          ThemeData.dark().copyWith(scaffoldBackgroundColor: BACKGROUND_COLOR),
+      theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: BACKGROUND_COLOR),
       home: const Scaffold(
         body: LoginScreen(),
       ),
