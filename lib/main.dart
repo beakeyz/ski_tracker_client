@@ -4,17 +4,20 @@ import 'package:dadjoke_client/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(
-    const Main(),
-  );
-}
-
-class App {
-  static bool greenFlag = false;
+  ApiUtils.checkForConnection((has) {
+    bool _has = has;
+    print(_has);
+    runApp(
+      Main(
+        has_internet: _has,
+      ),
+    );
+  });
 }
 
 class Main extends StatelessWidget {
-  const Main({Key? key}) : super(key: key);
+  final bool has_internet;
+  const Main({Key? key, required this.has_internet}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

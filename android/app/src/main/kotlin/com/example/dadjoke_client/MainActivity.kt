@@ -1,4 +1,4 @@
-package com.example.dadjoke_client
+package me.beakey.dadjoke_client
 
 import io.flutter.embedding.android.FlutterActivity
 

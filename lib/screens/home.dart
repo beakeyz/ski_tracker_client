@@ -1,4 +1,5 @@
 import 'package:dadjoke_client/constants/colors.dart';
+import 'package:dadjoke_client/constants/main_screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -10,26 +11,75 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _slide = 0;
+  late PageController pageController;
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
+  void jmpPage(int page) {
+    pageController.jumpToPage(page);
+  }
+
+  void changePageEvent(int page) {
+    setState(() {
+      _slide = page;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("success!"),
+      body: PageView(
+        children: main_screens,
+        controller: pageController,
+        onPageChanged: changePageEvent,
+        //physics: const NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: CupertinoTabBar(
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
+              color: _slide == 0 ? PRIMARY_COLOR : SECONDARY_COLOR,
+              shadows: [
+                Shadow(
+                  blurRadius: 14,
+                  color: Colors.black,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
             label: '',
-            backgroundColor: PRIMARY_COLOR,
+            backgroundColor: SECONDARY_COLOR,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.notifications),
+            icon: Icon(
+              Icons.notifications,
+              color: _slide == 1 ? PRIMARY_COLOR : SECONDARY_COLOR,
+              shadows: [
+                Shadow(
+                  blurRadius: 14,
+                  color: Colors.black,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
             label: '',
-            backgroundColor: PRIMARY_COLOR,
+            backgroundColor: SECONDARY_COLOR,
           ),
         ],
         backgroundColor: BACKGROUND_COLOR,
+        activeColor: PRIMARY_COLOR,
+        onTap: jmpPage,
       ),
     );
   }
