@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/JokeEntry.dart';
 import 'package:dadjoke_client/core/models/JokeList.dart';
@@ -25,7 +26,7 @@ class _ListScreenState extends State<ListScreen> {
       // Api method
 
       Response _res = res;
-
+      print(_res.body);
       var jokes = jsonDecode(_res.body);
       JokeList dummy = JokeList.fromJson(jokes);
       print(dummy.size);
@@ -36,7 +37,6 @@ class _ListScreenState extends State<ListScreen> {
         _entries = dummy;
       });
     });
-
     // TODO: file-to-server synchronization
   }
 
@@ -48,9 +48,6 @@ class _ListScreenState extends State<ListScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
-              SizedBox(
-                height: 30,
-              ),
               Expanded(
                 child: ListView.builder(
                   itemCount: _entries == null ? 0 : _entries!.size,

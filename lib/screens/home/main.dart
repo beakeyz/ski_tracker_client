@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:dadjoke_client/core/api_calls.dart';
+import 'package:dadjoke_client/core/models/JokeEntry.dart';
+import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/widgets/button.dart';
 import 'package:dadjoke_client/widgets/input_field.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +16,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final TextEditingController controller1 = TextEditingController();
-  final TextEditingController controller2 = TextEditingController();
+  final TextEditingController summaryController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
 
   String responseText = "Send";
 
@@ -37,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     super.dispose();
-    controller1.dispose();
+    summaryController.dispose();
   }
 
   @override
@@ -53,36 +57,51 @@ class _MainScreenState extends State<MainScreen> {
                 child: Container(),
                 flex: 2,
               ),
-              Text(
+              const Text(
                 "Input 🕳️",
                 textScaleFactor: 3,
               ),
-              SizedBox(height: 50),
-              TextInputField(editingController: controller1, hintText: "what to add 💫", textInputType: TextInputType.text),
+              const SizedBox(height: 50),
+              TextInputField(editingController: summaryController, hintText: "Brief description 💫", textInputType: TextInputType.text, boxWidth: 290),
+              const SizedBox(
+                height: 10,
+              ),
+              TextInputField(editingController: contentController, hintText: "Content 💫", textInputType: TextInputType.text),
               Flexible(
                 child: Container(),
                 flex: 2,
               ),
               Button(
-                  callback: () {
-                    String text = controller1.text;
-                    //TODO make endpoint
-                    //ApiUtils.makeRequest("/addthing/:$text", false, "Post", (res) {});
-                    Map<String, String> h = {
-                      "data": text,
-                      "tag": "thing",
-                    };
+                callback: () {
+                  String summary = summaryController.text;
+                  String joke = contentController.text;
+                  String time = DateUtils.dateOnly(DateTime.now()).toString().split(" ")[0];
+                  print(time);
+                  // We are NOT going to trust the client about what the index is, so this will be a funny number =)
+                  // We ARE going to trust the user with the strings it sends (for now)
+                  JokeEntry entry = JokeEntry(Summary: summary, joke: joke, Date: time, index: 69);
+                  var header = {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                  };
+                  ApiUtils.postRequest("/addItem", false, jsonEncode(entry.toJson()), header, (res) {
+                    // DEBUG
+                    Response r = res;
+                    print(r.headers);
 
-                    ApiUtils.postRequest("/addItem", false, h, (res) {
-                      Response r = res;
-                      print(r.headers);
-                      setResponseText(r.body);
-                      // thing
-                    });
-                    print("pretend we sent sm $text");
-                  },
-                  text: responseText),
-              SizedBox(
+                    // thing
+                    setResponseText(r.body);
+                    if (r.body.contains("Success")) {
+                      setState(() {
+                        summaryController.text = "";
+                        contentController.text = "";
+                      });
+                    }
+                  });
+                },
+                child: Text(responseText),
+              ),
+              const SizedBox(
                 height: 50,
               ),
             ],

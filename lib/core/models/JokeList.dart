@@ -10,6 +10,9 @@ class JokeList {
   static List<JokeEntry> _parse_jlist(Map<String, dynamic> json) {
     List<JokeEntry> list = [];
     for (var thing in json['List']) {
+      print(thing);
+
+      print("end");
       list.add(JokeEntry.fromJson(thing));
     }
     return list;

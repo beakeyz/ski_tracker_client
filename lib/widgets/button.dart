@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
   Function callback;
-  final String text;
-  Button({Key? key, required this.callback, required this.text}) : super(key: key);
+  final Widget child;
+  Button({Key? key, required this.callback, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class Button extends StatelessWidget {
             ),
           ],
         ),
-        child: Text(text),
+        child: child,
       ),
     );
   }

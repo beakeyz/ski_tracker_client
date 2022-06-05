@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -47,11 +48,13 @@ class ApiUtils {
     }
   }
 
-  static void postRequest(String path, bool https, Map<String, String> headers, Function callback) async {
+  static void postRequest(String path, bool https, Object? body, Map<String, String>? headers, Function callback) async {
     try {
-      Map<String, String> _headers = headers;
+      // Just to be clear on what elements we are using in the post constructor
+      Map<String, String>? _headers = headers;
+      Object? _body = body;
 
-      await http.post(Uri.http(BASE_URL, path), headers: _headers).then((res) => callback(res));
+      await http.post(Uri.http(BASE_URL, path), body: _body, headers: _headers).then((res) => callback(res));
     } catch (e) {
       print("fuck");
       print(e.toString());

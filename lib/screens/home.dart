@@ -50,11 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(
               Icons.home,
               color: _slide == 0 ? PRIMARY_COLOR : SECONDARY_COLOR,
-              shadows: [
+              shadows: const [
                 Shadow(
-                  blurRadius: 14,
+                  blurRadius: 10,
                   color: Colors.black,
-                  offset: Offset(0, 2),
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
@@ -65,11 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(
               Icons.notifications,
               color: _slide == 1 ? PRIMARY_COLOR : SECONDARY_COLOR,
-              shadows: [
+              shadows: const [
                 Shadow(
-                  blurRadius: 14,
+                  blurRadius: 10,
                   color: Colors.black,
-                  offset: Offset(0, 2),
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
@@ -77,6 +77,14 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: SECONDARY_COLOR,
           ),
         ],
+        iconSize: 40,
+        height: 45,
+        border: const Border(
+          top: BorderSide(
+            color: SECONDARY_COLOR,
+            width: 2,
+          ),
+        ),
         backgroundColor: BACKGROUND_COLOR,
         activeColor: PRIMARY_COLOR,
         onTap: jmpPage,

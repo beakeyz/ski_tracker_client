@@ -1,4 +1,5 @@
 import 'package:dadjoke_client/constants/colors.dart';
+import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/screens/home.dart';
 import 'package:dadjoke_client/widgets/button.dart';
@@ -13,6 +14,23 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool is_waiting = false;
+
+  void updateWaiting(bool new_val) {
+    setState(() {
+      is_waiting = new_val;
+    });
+  }
+
+  void handleBtnClick() {
+    updateWaiting(true);
+
+    ApiUtils.makeRequest("/", false, "get", (res) {
+      updateWaiting(false);
+      ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,9 +67,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Button(
                 callback: () {
-                  ScreenSwitcher.gotoScreen(context, const HomeScreen(), true);
+                  handleBtnClick();
                 },
-                text: "Get going!",
+                child: !is_waiting
+                    ? const Text(
+                        "Get going!",
+                      )
+                    : const CircularProgressIndicator(
+                        color: PRIMARY_COLOR,
+                        strokeWidth: 1.5,
+                      ),
               ),
 
               Flexible(
