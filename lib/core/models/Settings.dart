@@ -34,7 +34,9 @@ class SettingVars {
 
   static var Settings = [
     Setting(name: "Test", setting: false),
+    Setting(name: "Do you want me to track you?", setting: true),
     Setting(name: "Test2", setting: "Something"),
+    Setting(name: "Server to connect to", setting: "localhost:4000"),
   ];
 
   static void save() {

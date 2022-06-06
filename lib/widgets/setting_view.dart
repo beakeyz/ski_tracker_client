@@ -39,10 +39,8 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
         break;
       case bool:
         if (widget.settingField.setting) {
-          print("Turned it on");
           animationController.forward();
         } else {
-          print("Turned it off");
           animationController.reverse();
         }
         break;
@@ -61,8 +59,16 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
     switch (widget.settingField.setting.runtimeType) {
       case String:
         return Container(
-          height: 55,
-          child: TextInputField(editingController: settingController, hintText: "this should BE something", textInputType: TextInputType.text),
+          height: 100,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(widget.settingField.name, style: const TextStyle(fontSize: 14)),
+              Expanded(
+                child: TextInputField(editingController: settingController, hintText: "this should BE something", textInputType: TextInputType.text),
+              ),
+            ],
+          ),
         );
       case bool:
         // TODO create custom widget

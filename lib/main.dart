@@ -29,17 +29,23 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     //TODO: clean up this setup
     JsonFileManager m = JsonFileManager();
-    m.loadFromFile(SettingVars.SETTINGS_FILE).then((settings) {
-      if (settings != null) {
-        List<Setting> sets = [];
-        for (var set in settings) {
-          sets.add(Setting.fromJson(set));
+
+    print("Processing...");
+    m.processDifferences(SettingVars.SETTINGS_FILE).then((_) {
+      print("Done");
+      m.loadFromFile(SettingVars.SETTINGS_FILE).then((settings) {
+        if (settings != null) {
+          List<Setting> sets = [];
+          for (var set in settings) {
+            sets.add(Setting.fromJson(set));
+          }
+          SettingVars.Settings = sets;
+        } else {
+          print("null");
         }
-        SettingVars.Settings = sets;
-      } else {
-        print("null");
-      }
+      });
     });
+
     // TODO
 
     return MaterialApp(

@@ -52,9 +52,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: ListView.builder(
                   itemCount: SettingVars.Settings.length,
                   itemBuilder: (context, index) {
+                    print(SettingVars.Settings.length);
                     return Container(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 20,
+                        vertical: 10,
                         horizontal: 10,
                       ),
                       child: SettingView(settingField: SettingVars.Settings[index]),
