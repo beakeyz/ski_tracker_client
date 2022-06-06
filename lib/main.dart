@@ -15,6 +15,10 @@ void main() {
   });
 }
 
+class App {
+  static bool hasServer = true;
+}
+
 class Main extends StatelessWidget {
   final bool has_internet;
   const Main({Key? key, required this.has_internet}) : super(key: key);

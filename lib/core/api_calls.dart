@@ -19,7 +19,7 @@ class ApiUtils {
     }
   }
 
-  static void makeRequest(String path, bool https, String method, Function callback) async {
+  static void makeRequest(String path, bool https, String method, Function callback, Function? errCallback) async {
     try {
       switch (method) {
         case "Get":
@@ -45,6 +45,7 @@ class ApiUtils {
     } catch (e) {
       print("fuck");
       print(e.toString());
+      errCallback!.call();
     }
   }
 

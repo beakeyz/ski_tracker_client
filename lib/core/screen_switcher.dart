@@ -16,7 +16,7 @@ class ScreenSwitcher {
       // TODO
       ApiUtils.makeRequest("/", false, "Get", (res) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => screen));
-      });
+      }, () {});
       return;
     }
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => screen));
@@ -24,6 +24,11 @@ class ScreenSwitcher {
 
   static bool pushScreen(BuildContext context, Widget screen) {
     Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen));
+    return true;
+  }
+
+  static bool popScreen(BuildContext context) {
+    Navigator.of(context).pop();
     return true;
   }
 }

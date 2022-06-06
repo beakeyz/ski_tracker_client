@@ -1,6 +1,7 @@
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
+import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/screens/home.dart';
 import 'package:dadjoke_client/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,11 @@ class _LoginScreenState extends State<LoginScreen> {
     updateWaiting(true);
 
     ApiUtils.makeRequest("/", false, "get", (res) {
+      App.hasServer = true;
+      updateWaiting(false);
+      ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+    }, () {
+      App.hasServer = false;
       updateWaiting(false);
       ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
     });
