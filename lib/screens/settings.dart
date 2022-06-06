@@ -1,6 +1,7 @@
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/models/Settings.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
+import 'package:dadjoke_client/widgets/button.dart';
 import 'package:dadjoke_client/widgets/setting_view.dart';
 import 'package:flutter/material.dart';
 
@@ -42,11 +43,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
           backgroundColor: BACKGROUND_COLOR,
         ),
         body: Container(
-          child: ListView.builder(
-            itemCount: SettingVars.Settings.length,
-            itemBuilder: (context, index) {
-              return SettingView(setting: SettingVars.Settings[index]);
-            },
+          child: Column(
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: SettingVars.Settings.length,
+                  itemBuilder: (context, index) {
+                    return SettingView(setting: SettingVars.Settings[index]);
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                child: Button(
+                  callback: () {
+                    // TODO save
+                    SettingVars.save();
+                  },
+                  child: const Text(
+                    "Save",
+                    style: TextStyle(
+                      fontFamily: "Open Sans",
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );

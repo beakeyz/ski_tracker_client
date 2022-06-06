@@ -10,28 +10,23 @@ class SettingView extends StatefulWidget {
 }
 
 class _SettingViewState extends State<SettingView> {
-  late Setting _setting;
-
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _setting = widget.setting;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    switch (_setting.setting.runtimeType) {
+    switch (widget.setting.setting.runtimeType) {
       case String:
         return Container(
-          child: Center(child: Text('WHAHA sm went wrong =D')),
+          child: Center(child: Text('WH sm went wrong =D')),
         );
       case bool:
         return InkWell(
           onTap: () {
             setState(() {
-              _setting.setting = !_setting.setting;
+              widget.setting.setting = !widget.setting.setting;
             });
           },
           child: Container(
@@ -41,11 +36,11 @@ class _SettingViewState extends State<SettingView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Flexible(flex: 1, child: Container()),
-                Text(_setting.name),
+                Text(widget.setting.name),
                 SizedBox(
                   width: 20,
                 ),
-                Text(_setting.setting == true ? "Yes" : "No"),
+                Text(widget.setting.setting == true ? "Yes" : "No"),
                 Flexible(flex: 1, child: Container()),
               ],
             ),
@@ -53,8 +48,10 @@ class _SettingViewState extends State<SettingView> {
         );
       default:
     }
+    var thing = widget.setting.setting.runtimeType;
+
     return Container(
-      child: Center(child: Text('WHAHA sm went wrong =D')),
+      child: Center(child: Text('WHAHA sm went wrong =D $thing')),
     );
   }
 }

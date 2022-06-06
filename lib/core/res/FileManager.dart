@@ -10,16 +10,30 @@ class FileManager {
 
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
+    for (FileSystemEntity thiing in directory.listSync()) {
+      print(thiing.path);
+    }
     return directory.path;
   }
 
-  void checkFile(String file) async {
+  Future<bool> checkFile(String file, bool create) async {
     final path = await _localPath;
     File f = File("$path/$file");
-    f.exists().then((value) {
-      hasFile = value;
+    if (f.existsSync()) {
+      print("Yes");
+      hasFile = true;
       checkedFIle = f;
-    });
+      return true;
+    }
+    if (create) {
+      print("Kinda");
+      f.createSync();
+      hasFile = true;
+      checkedFIle = f;
+      return true;
+    }
+    print("just no");
+    return false;
   }
 
   void clearFile() {
@@ -27,5 +41,13 @@ class FileManager {
     checkedFIle = null;
   }
 
-  void write() async {}
+  void write(String file, String contents) async {
+    bool success = await checkFile(file, true);
+    if (success && checkedFIle != null) {
+      print("YES");
+      checkedFIle!.writeAsStringSync(contents);
+      return;
+    }
+    print("No");
+  }
 }

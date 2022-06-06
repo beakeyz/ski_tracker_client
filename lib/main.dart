@@ -1,5 +1,7 @@
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
+import 'package:dadjoke_client/core/models/Settings.dart';
+import 'package:dadjoke_client/core/res/JsonFileManager.dart';
 import 'package:dadjoke_client/screens/login.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +27,18 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    JsonFileManager m = JsonFileManager();
+    m.loadFromFile(SettingVars.SETTINGS_FILE).then((settings) {
+      if (settings != null) {
+        List<Setting> sets = [];
+        for (var set in settings) {
+          sets.add(Setting.fromJson(set));
+        }
+        SettingVars.Settings = sets;
+      } else {
+        print("null");
+      }
+    });
     return MaterialApp(
       title: "Dadjokegen client",
       debugShowCheckedModeBanner: false,
