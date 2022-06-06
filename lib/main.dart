@@ -27,6 +27,7 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: clean up this setup
     JsonFileManager m = JsonFileManager();
     m.loadFromFile(SettingVars.SETTINGS_FILE).then((settings) {
       if (settings != null) {
@@ -39,6 +40,8 @@ class Main extends StatelessWidget {
         print("null");
       }
     });
+    // TODO
+
     return MaterialApp(
       title: "Dadjokegen client",
       debugShowCheckedModeBanner: false,

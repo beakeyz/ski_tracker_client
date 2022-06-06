@@ -46,13 +46,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             children: [
               SizedBox(
-                height: 50,
+                height: 10,
               ),
               Expanded(
                 child: ListView.builder(
                   itemCount: SettingVars.Settings.length,
                   itemBuilder: (context, index) {
-                    return SettingView(setting: SettingVars.Settings[index]);
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 20,
+                        horizontal: 10,
+                      ),
+                      child: SettingView(settingField: SettingVars.Settings[index]),
+                    );
                   },
                 ),
               ),
