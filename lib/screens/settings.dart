@@ -1,4 +1,5 @@
 import 'package:dadjoke_client/constants/colors.dart';
+import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/Settings.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/widgets/button.dart';
@@ -69,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   callback: () {
                     // TODO save
                     SettingVars.save();
+                    ApiUtils.verifyHost((res) {});
                   },
                   child: const Text(
                     "Save",

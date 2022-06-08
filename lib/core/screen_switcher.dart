@@ -1,3 +1,4 @@
+import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class ScreenSwitcher {
     if (check) {
       // make api call to check premission (fuck oauth) and set the flag variable to it
       // TODO
-      ApiUtils.makeRequest("/", false, "Get", (res) {
+      ApiUtils.makeRequest(HOME, false, "Get", (res) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => screen));
       }, () {});
       return;

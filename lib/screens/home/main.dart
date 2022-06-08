@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/JokeEntry.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
@@ -84,7 +85,7 @@ class _MainScreenState extends State<MainScreen> {
                     "Content-Type": "application/json",
                     "Accept": "application/json",
                   };
-                  ApiUtils.postRequest("/addItem", false, jsonEncode(entry.toJson()), header, (res) {
+                  ApiUtils.postRequest(POST_JOKES, false, jsonEncode(entry.toJson()), header, (res) {
                     // DEBUG
                     Response r = res;
                     print(r.headers);
@@ -97,6 +98,8 @@ class _MainScreenState extends State<MainScreen> {
                         contentController.text = "";
                       });
                     }
+                  }, () {
+                    setResponseText("Could not connect!");
                   });
                 },
                 child: Text(responseText),

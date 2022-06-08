@@ -49,6 +49,12 @@ class Main extends StatelessWidget {
     // TODO
 
     return MaterialApp(
+      builder: ((context, child) {
+        return ScrollConfiguration(
+          behavior: AppBehavior(),
+          child: child!,
+        );
+      }),
       title: "Dadjokegen client",
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(scaffoldBackgroundColor: BACKGROUND_COLOR),
@@ -56,5 +62,12 @@ class Main extends StatelessWidget {
         body: LoginScreen(),
       ),
     );
+  }
+}
+
+class AppBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

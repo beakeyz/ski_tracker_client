@@ -33,11 +33,18 @@ class SettingVars {
   static const String SETTINGS_FILE = "settings.json";
 
   static var Settings = [
-    Setting(name: "Test", setting: false),
-    Setting(name: "Do you want me to track you?", setting: true),
-    Setting(name: "Test2", setting: "Something"),
-    Setting(name: "Server to connect to", setting: "localhost:4000"),
+    Setting(name: "I know what i'm doing", setting: false),
+    Setting(name: "Server hostname", setting: "192.168.0.45:4000"),
   ];
+
+  static Setting? getByName(String name) {
+    for (Setting s in Settings) {
+      if (s.name == name) {
+        return s;
+      }
+    }
+    return null;
+  }
 
   static void save() {
     for (Setting setting in Settings) {

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/JokeEntry.dart';
@@ -20,31 +21,37 @@ class _ListScreenState extends State<ListScreen> {
   JokeList? _entries = null;
   bool no_internet = false;
 
+  void setInternet(bool internet) {
+    setState(() {
+      no_internet = internet;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     print("loading the lists...");
 
     if (App.hasServer) {
-      ApiUtils.makeRequest("/getJokes", false, "get", (res) {
+      ApiUtils.makeRequest(GET_JOKES, false, "get", (res) {
         // Api method
 
         Response _res = res;
-        print(_res.body);
+        //print(_res.body);
         var jokes = jsonDecode(_res.body);
         JokeList dummy = JokeList.fromJson(jokes);
-        print(dummy.size);
+        //print(dummy.size);
         if (dummy.size == _entries?.size) {
           return;
         }
         setState(() {
           _entries = dummy;
         });
-      }, () {});
-    } else {
-      setState(() {
-        no_internet = true;
+      }, () {
+        setInternet(false);
       });
+    } else {
+      setInternet(false);
     }
     // TODO: file-to-server synchronization
   }
@@ -54,7 +61,7 @@ class _ListScreenState extends State<ListScreen> {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             children: [
               no_internet
@@ -71,7 +78,7 @@ class _ListScreenState extends State<ListScreen> {
                         itemCount: _entries == null ? 0 : _entries!.size,
                         itemBuilder: ((context, index) {
                           return ListEntry(
-                            Joke: _entries!.list[index].joke,
+                            Joke: _entries!.list[index],
                           );
                         }),
                       ),

@@ -1,3 +1,4 @@
+import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
@@ -26,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void handleBtnClick() {
     updateWaiting(true);
 
-    ApiUtils.makeRequest("/", false, "get", (res) {
+    ApiUtils.makeRequest(HOME, false, "get", (res) {
       App.hasServer = true;
       updateWaiting(false);
       ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);

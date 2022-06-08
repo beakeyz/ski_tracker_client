@@ -2,17 +2,34 @@ import 'dart:math';
 
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bounce/flutter_bounce.dart';
 
-class Button extends StatelessWidget {
+class Button extends StatefulWidget {
   Function callback;
   final Widget child;
   Button({Key? key, required this.callback, required this.child}) : super(key: key);
 
   @override
+  State<Button> createState() => _ButtonState();
+}
+
+class _ButtonState extends State<Button> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        callback.call();
+    return Bounce(
+      duration: const Duration(milliseconds: 150),
+      onPressed: () {
+        widget.callback.call();
       },
       child: Container(
         width: double.infinity,
@@ -41,7 +58,7 @@ class Button extends StatelessWidget {
             ),
           ],
         ),
-        child: child,
+        child: widget.child,
       ),
     );
   }

@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 ScreenSwitcher.pushScreen(context, const SettingsScreen());
               },
-              child: const Icon(Icons.layers_outlined, size: 35),
+              child: const Icon(Icons.settings_outlined, size: 35),
             ),
             const SizedBox(
               width: 20,
