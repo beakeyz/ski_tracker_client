@@ -24,14 +24,14 @@ class _ListEntryState extends State<ListEntry> {
         ScreenSwitcher.pushScreen(context, ListFocus(tag: widget));
       },
       child: Container(
-        width: double.infinity,
+        width: MediaQuery.of(context).size.width,
         height: 72,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             transform: GradientRotation((180 + 60) * (pi / 180)),
             colors: [
-              Color.fromARGB(244, 67, 55, 68),
-              Color.fromARGB(160, 153, 3, 146),
+              Color.fromARGB(255, 1, 138, 172),
+              Color.fromARGB(255, 153, 3, 146),
             ],
           ),
           borderRadius: BorderRadius.all(
@@ -42,13 +42,14 @@ class _ListEntryState extends State<ListEntry> {
         margin: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(child: Container()),
                 Container(
-                  width: 300,
+                  width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     widget.Joke.Summary,
                     softWrap: false,
@@ -67,10 +68,9 @@ class _ListEntryState extends State<ListEntry> {
                 Flexible(child: Container()),
               ],
             ),
-            Flexible(child: Container()),
-            Text(widget.Joke.index.toString()),
-            const SizedBox(
-              width: 10,
+            Text(
+              widget.Joke.index.toString(),
+              style: TextStyle(fontSize: 21),
             ),
           ],
         ),

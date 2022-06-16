@@ -21,4 +21,9 @@ class JokeList {
   JokeList.fromJson(Map<String, dynamic> json)
       : list = JokeList._parse_jlist(json),
         size = json['Size'];
+
+  Map<String, dynamic> toJson() => {
+        'List': list,
+        'Size': size,
+      };
 }

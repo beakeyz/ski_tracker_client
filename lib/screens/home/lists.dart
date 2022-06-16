@@ -5,6 +5,7 @@ import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/JokeEntry.dart';
 import 'package:dadjoke_client/core/models/JokeList.dart';
+import 'package:dadjoke_client/core/models/LocalStorage.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/widgets/list_entry.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +34,11 @@ class _ListScreenState extends State<ListScreen> {
     print("loading the lists...");
 
     if (App.hasServer) {
-      ApiUtils.makeRequest(GET_JOKES, false, "get", (res) {
+      ApiUtils.makeRequest(GET_JOKES, true, "get", (res) {
         // Api method
 
         Response _res = res;
-        //print(_res.body);
+        print(_res.headers);
         var jokes = jsonDecode(_res.body);
         JokeList dummy = JokeList.fromJson(jokes);
         //print(dummy.size);
@@ -52,6 +53,13 @@ class _ListScreenState extends State<ListScreen> {
       });
     } else {
       setInternet(false);
+
+      LocalStorage().loadStorage().then((list) {
+        //
+        setState(() {
+          _entries = list;
+        });
+      });
     }
     // TODO: file-to-server synchronization
   }
@@ -64,47 +72,16 @@ class _ListScreenState extends State<ListScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             children: [
-              no_internet
-                  ? Flexible(
-                      child: Container(),
-                      flex: 2,
-                    )
-                  : SizedBox(
-                      height: 0,
-                    ),
-              !no_internet
-                  ? Expanded(
-                      child: ListView.builder(
-                        itemCount: _entries == null ? 0 : _entries!.size,
-                        itemBuilder: ((context, index) {
-                          return ListEntry(
-                            Joke: _entries!.list[index],
-                          );
-                        }),
-                      ),
-                    )
-                  : Text(
-                      "TODO: load local cache",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w600,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 20,
-                            color: PRIMARY_COLOR,
-                            offset: Offset(4, 6),
-                          )
-                        ],
-                      ),
-                    ),
-              no_internet
-                  ? Flexible(
-                      child: Container(),
-                      flex: 2,
-                    )
-                  : SizedBox(
-                      height: 0,
-                    ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _entries == null ? 0 : _entries!.size,
+                  itemBuilder: ((context, index) {
+                    return ListEntry(
+                      Joke: _entries!.list[index],
+                    );
+                  }),
+                ),
+              ),
             ],
           ),
         ),

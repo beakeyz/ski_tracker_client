@@ -1,6 +1,7 @@
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/constants/main_screens.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
+import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,18 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           centerTitle: false,
           actions: [
+            const SizedBox(
+              width: 20,
+            ),
+            !App.hasServer
+                ? InkWell(
+                    onTap: () {
+                      //TODO
+                    },
+                    child: const Icon(Icons.wifi_off_rounded, size: 35),
+                  )
+                : const SizedBox(),
+            Flexible(child: Container()),
             InkWell(
               onTap: () {
                 ScreenSwitcher.pushScreen(context, const SettingsScreen());

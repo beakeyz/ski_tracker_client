@@ -79,12 +79,43 @@ class ApiUtils {
     }
   }
 
-  static void makeRequest(String path, bool https, String method, Function callback, Function? errCallback) async {
-    verifyHost((value) async {
-      try {
-        if (!value) {
-          throw Exception("yikes");
+  //TODO clean this ABSOLUTE SHITHEAP up, ty
+  static void makeRequest(String path, bool check, String method, Function callback, Function? errCallback) async {
+    if (check) {
+      verifyHost((value) async {
+        try {
+          if (!value) {
+            throw Exception("yikes");
+          }
+          switch (method) {
+            case "Get":
+            case "get":
+              await http.get(Uri.http(BASE_URL, path)).then((res) => callback(res));
+              break;
+            case "Post":
+            case "post":
+              await http.post(Uri.http(BASE_URL, path)).then((res) => callback(res));
+              break;
+            case "Delete":
+            case "delete":
+              await http.delete(Uri.http(BASE_URL, path)).then((res) => callback(res));
+              break;
+            case "Head":
+            case "head":
+              await http.head(Uri.http(BASE_URL, path)).then((res) => callback(res));
+              break;
+            default:
+              await http.get(Uri.http(BASE_URL, path)).then((res) => callback(res));
+              print("btw, u didnt specify a valid method -_-");
+          }
+        } catch (e) {
+          print("fuck");
+          print(e.toString());
+          errCallback?.call();
         }
+      });
+    } else {
+      try {
         switch (method) {
           case "Get":
           case "get":
@@ -111,7 +142,7 @@ class ApiUtils {
         print(e.toString());
         errCallback?.call();
       }
-    });
+    }
   }
 
   static void postRequest(String path, bool https, Object? body, Map<String, String>? headers, Function callback, Function? errCallback) async {

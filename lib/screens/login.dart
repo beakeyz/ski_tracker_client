@@ -1,6 +1,7 @@
 import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
+import 'package:dadjoke_client/core/models/LocalStorage.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/screens/home.dart';
@@ -27,12 +28,19 @@ class _LoginScreenState extends State<LoginScreen> {
   void handleBtnClick() {
     updateWaiting(true);
 
-    ApiUtils.makeRequest(HOME, false, "get", (res) {
+    ApiUtils.makeRequest(HOME, true, "get", (res) {
       App.hasServer = true;
       updateWaiting(false);
       ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
     }, () {
       App.hasServer = false;
+      LocalStorage().checkFile(LocalStorage.PATH, false).then((value) {
+        //
+        if (!value) {
+          LocalStorage().initStorage();
+          print("storage done!");
+        }
+      });
       updateWaiting(false);
       ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
     });

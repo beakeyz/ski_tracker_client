@@ -5,7 +5,7 @@ import 'package:dadjoke_client/core/res/FileManager.dart';
 
 class JsonFileManager extends FileManager {
   Future<dynamic> loadFromFile(String file) async {
-    bool succes = await checkFile(file, false);
+    bool succes = await checkFile(file, true);
     if (succes) {
       String data = checkedFIle!.readAsStringSync();
       try {
@@ -18,6 +18,8 @@ class JsonFileManager extends FileManager {
     return null;
   }
 
+  //TODO: make this function more dynamic
+  // currentrly its only available for the Setting typed classes
   Future<void> processDifferences(String file) async {
     List<Setting> list = [];
     await loadFromFile(file).then((loadedFile) {
