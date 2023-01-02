@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/JokeEntry.dart';
-import 'package:dadjoke_client/core/models/JokeList.dart';
+import 'package:dadjoke_client/core/models/DataEntry.dart';
+import 'package:dadjoke_client/core/models/DataList.dart';
 import 'package:dadjoke_client/core/models/LocalStorage.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/widgets/list_entry.dart';
@@ -19,7 +19,7 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  JokeList? _entries = null;
+  DataList? _entries = null;
   bool no_internet = false;
 
   void setInternet(bool internet) {
@@ -32,15 +32,14 @@ class _ListScreenState extends State<ListScreen> {
   void initState() {
     super.initState();
     print("loading the lists...");
-
     if (App.hasServer) {
-      ApiUtils.makeRequest(GET_JOKES, true, "get", (res) {
+      ApiUtils.makeRequest(GET_JOKES, "get", (res) {
         // Api method
 
         Response _res = res;
         print(_res.headers);
         var jokes = jsonDecode(_res.body);
-        JokeList dummy = JokeList.fromJson(jokes);
+        DataList dummy = DataList.fromJson(jokes);
         //print(dummy.size);
         if (dummy.size == _entries?.size) {
           return;

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/JokeEntry.dart';
+import 'package:dadjoke_client/core/models/DataEntry.dart';
 import 'package:dadjoke_client/core/models/LocalStorage.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/main.dart';
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
     print(time);
     // We are NOT going to trust the client about what the index is, so this will be a funny number =)
     // We ARE going to trust the user with the strings it sends (for now)
-    JokeEntry entry = JokeEntry(Summary: summary, joke: joke, Date: time, index: 69);
+    DataEntry entry = DataEntry(Summary: summary, joke: joke, Date: time, index: 69);
     var header = {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -84,7 +84,7 @@ class _MainScreenState extends State<MainScreen> {
 
     // We are NOT going to trust the client about what the index is, so this will be a funny number =)
     // We ARE going to trust the user with the strings it sends (for now)
-    JokeEntry entry = JokeEntry(Summary: summary, joke: joke, Date: time, index: 69);
+    DataEntry entry = DataEntry(Summary: summary, joke: joke, Date: time, index: 69);
     LocalStorage().saveToStorage(entry);
   }
 

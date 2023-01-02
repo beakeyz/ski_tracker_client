@@ -70,7 +70,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   callback: () {
                     // TODO save
                     SettingVars.save();
-                    ApiUtils.verifyHost((res) {});
+                    ApiUtils.verifyHost((res) {
+                      if (res) {
+                        Setting? host = SettingVars.getByName("Server hostname");
+                        if (host != null) {
+                          ApiUtils.setHost(host.setting);
+                        }
+                      }
+                    });
                   },
                   child: const Text(
                     "Save",

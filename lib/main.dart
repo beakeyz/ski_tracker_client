@@ -47,6 +47,13 @@ class Main extends StatelessWidget {
     });
 
     // TODO
+    Setting? host = SettingVars.getByName("Server hostname");
+    if (host != null) {
+      ApiUtils.setHost(host.setting);
+    } else {
+      // TODO: show erro screen
+      print("ERROR: could not get BASE_URL from settings");
+    }
 
     return MaterialApp(
       builder: ((context, child) {

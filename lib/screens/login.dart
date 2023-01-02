@@ -25,15 +25,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  void handleBtnClick() {
-    updateWaiting(true);
-
-    ApiUtils.makeRequest(HOME, true, "get", (res) {
-      App.hasServer = true;
-      updateWaiting(false);
-      ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
-    }, () {
-      App.hasServer = false;
+  void noConnection() {
+    App.hasServer = false;
       LocalStorage().checkFile(LocalStorage.PATH, false).then((value) {
         //
         if (!value) {
@@ -43,6 +36,23 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       updateWaiting(false);
       ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+  }
+
+  void handleBtnClick() {
+    updateWaiting(true);
+
+    ApiUtils.checkUrlForConnection(ApiUtils.BASE_URL, (conectionExists) {
+      if (conectionExists) {
+        ApiUtils.makeRequest(TEST_API, "get", (res) {
+          App.hasServer = true;
+          updateWaiting(false);
+          ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+        }, () {
+          noConnection();
+        });
+      } else {
+        noConnection();
+      }
     });
   }
 

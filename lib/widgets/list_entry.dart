@@ -1,14 +1,14 @@
 import 'dart:math';
 
 import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/models/JokeEntry.dart';
+import 'package:dadjoke_client/core/models/DataEntry.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/screens/home/list_focus.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bounce/flutter_bounce.dart';
 
 class ListEntry extends StatefulWidget {
-  final JokeEntry Joke;
+  final DataEntry Joke;
   ListEntry({Key? key, required this.Joke}) : super(key: key);
 
   @override

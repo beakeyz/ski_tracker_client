@@ -15,7 +15,7 @@ class ScreenSwitcher {
     if (check) {
       // make api call to check premission (fuck oauth) and set the flag variable to it
       // TODO
-      ApiUtils.makeRequest(HOME, false, "Get", (res) {
+      ApiUtils.makeRequest(HOME, "Get", (res) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => screen));
       }, () {});
       return;

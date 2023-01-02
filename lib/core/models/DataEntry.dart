@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class JokeEntry {
+class DataEntry {
   String Summary;
   String joke;
   String Date;
   int index;
-  JokeEntry({required this.Summary, required this.joke, required this.Date, required this.index});
+  DataEntry({required this.Summary, required this.joke, required this.Date, required this.index});
 
-  JokeEntry.fromJson(Map<String, dynamic> json)
+  DataEntry.fromJson(Map<String, dynamic> json)
       : Summary = json['Summary'],
         joke = json['Joke'],
         Date = json['Date'],

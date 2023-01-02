@@ -9,3 +9,6 @@ const String EDIT_JOKES = "/api/v1/edit_jokes";
 const String LOGIN = "/login";
 const String LOGOUT = "/logout";
 const String SIGNUP = "/req_signup";
+
+const String TEST_API = "/api/v1/test";
+const String ASK_USER_PERMS = "/api/v1/user_perms";

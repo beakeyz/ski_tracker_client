@@ -23,11 +23,18 @@ class JsonFileManager extends FileManager {
   Future<void> processDifferences(String file) async {
     List<Setting> list = [];
     await loadFromFile(file).then((loadedFile) {
+      if (loadedFile == null) {
+        return;
+      }
       int index = 0;
       for (var set in SettingVars.Settings) {
         //preform linear search through the filed settings
         bool found = false;
         for (var l in loadedFile) {
+          if (l == null) {
+            print("Found NULL entry while processing file differences");
+            continue;
+          }
           Setting loadedSetting = Setting.fromJson(l);
           if (loadedSetting.name == set.name) {
             print("DEBUG");
