@@ -15,21 +15,24 @@ class ApiUtils {
 
   static void verifyHost(Function callback) async {
     try {
-      String new_val = SettingVars.getByName("Server hostname")?.setting;
-      print("NEW" + new_val);
-      print("BASE" + BASE_URL);
+      Setting? setting = SettingVars.getByName("Server hostname");
+      if (setting != null && setting is StringSetting) {
+        String new_val = setting.value;
+        print("NEW" + new_val);
+        print("BASE" + BASE_URL);
 
-      checkHostForConnection(new_val, (worked) {
-        if (worked) {
-          print("worked");
-          App.hasServer = true;
-          callback(true);
-          return;
-        }
-        print("didnt work");
-        App.hasServer = false;
-        callback(false);
-      });
+        checkHostForConnection(new_val, (worked) {
+          if (worked) {
+            print("worked");
+            App.hasServer = true;
+            callback(true);
+            return;
+          }
+          print("didnt work");
+          App.hasServer = false;
+          callback(false);
+        });
+      }
       
     } catch (e) {
       print(e);
@@ -50,7 +53,7 @@ class ApiUtils {
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         print('connected');
         callback(true);
-      }
+      } 
     } on SocketException catch (_) {
       print('not connected');
       callback(false);

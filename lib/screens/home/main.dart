@@ -85,7 +85,12 @@ class _MainScreenState extends State<MainScreen> {
     // We are NOT going to trust the client about what the index is, so this will be a funny number =)
     // We ARE going to trust the user with the strings it sends (for now)
     DataEntry entry = DataEntry(Summary: summary, joke: joke, Date: time, index: 69);
-    LocalStorage().saveToStorage(entry);
+    LocalStorage().saveToStorage(entry, () {
+      setState(() {
+          summaryController.text = "";
+          contentController.text = "";
+        });
+    });
   }
 
   @override

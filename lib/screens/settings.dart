@@ -15,7 +15,12 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
-  Widget build(BuildContext context) => Scaffold(
+  Widget build(BuildContext context) {
+    for (var set in SettingVars.Settings) {
+      print(set);
+      print(SettingVars.Settings.length);
+    }
+    return Scaffold(
         appBar: AppBar(
           centerTitle: false,
           automaticallyImplyLeading: false,
@@ -46,7 +51,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         body: Container(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Expanded(
@@ -73,8 +78,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ApiUtils.verifyHost((res) {
                       if (res) {
                         Setting? host = SettingVars.getByName("Server hostname");
-                        if (host != null) {
-                          ApiUtils.setHost(host.setting);
+                        if (host != null && host is StringSetting) {
+                          ApiUtils.setHost(host.value);
                         }
                       }
                     });
@@ -92,4 +97,5 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ),
       );
+  }
 }

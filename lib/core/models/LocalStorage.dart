@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dadjoke_client/core/models/DataEntry.dart';
 import 'package:dadjoke_client/core/models/DataList.dart';
@@ -10,31 +11,45 @@ class LocalStorage extends JsonFileManager {
   static const String PATH = "storage.json";
 
   void initStorage() async {
-    await checkFile(PATH, true).then((value) {
-      if (!value) return;
+    checkFile(PATH, true, (file) {
+      if (file != null) return;
       Map newList = DataList(list: [], size: 0).toJson();
       String jsonString = jsonEncode(newList);
       write(PATH, jsonString);
     });
   }
 
-  Future<DataList> loadStorage() async {
-    dynamic list = await loadFromFile(PATH);
-    print(list);
-    dynamic actualList = DataList.fromJson(list);
-    return actualList;
+  void loadStorage(Function callback) {
+    loadFromFile(PATH, (list) {
+      print(list);
+      if (list == null) {
+        callback(null);
+        return;
+      }
+
+      try {
+        dynamic actualList = DataList.fromJson(list);
+        callback(actualList);
+      } catch (_) {
+        callback(null);
+      }
+    });
+    
   }
 
-  void saveToStorage(DataEntry entry) async {
+  void saveToStorage(DataEntry entry, Function finishedCallback) {
     try {
-      await loadStorage().then((jokes) {
-        DataEntry _entry = entry;
-        _entry.index = jokes.size;
-        jokes.list.add(_entry);
-        jokes.size++;
+      loadStorage((list) {
+        list ??= DataList(list: [], size: 0);
 
-        String jsonString = jsonEncode(jokes);
+        DataEntry _entry = entry;
+        _entry.index = list.size;
+        list.list.add(_entry);
+        list.size++;
+
+        String jsonString = jsonEncode(list);
         write(PATH, jsonString);
+        finishedCallback();
       });
     } catch (ex) {
       print(ex);

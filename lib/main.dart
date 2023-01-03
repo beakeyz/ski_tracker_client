@@ -1,17 +1,51 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dadjoke_client/constants/colors.dart';
+import 'package:dadjoke_client/core/StateLock.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/Settings.dart';
 import 'package:dadjoke_client/core/res/JsonFileManager.dart';
+import 'package:dadjoke_client/core/updates/StateUpdater.dart';
 import 'package:dadjoke_client/screens/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
+  // first things first, lets load settings
+  WidgetsFlutterBinding.ensureInitialized();
+
+  JsonFileManager m = JsonFileManager();
+
+  print("${SettingVars.Settings.length} hihi");
+
+  print("Processing...");
+
+  // fetch settings in json
+  m.fetchSettings((settingsToLoad) {
+    // - if json does not exist, make it and load default settings into it
+
+    if (settingsToLoad == SettingVars.DefaultSettings) {
+      print("Detected default settings! writing to json...");
+      m.checkFile(SettingVars.SETTINGS_FILE, true, (new_file) {
+        if (new_file != null) {
+          String contents = jsonEncode(settingsToLoad);
+          m.write(SettingVars.SETTINGS_FILE, contents);
+        } else {
+          print("ERROR: new_file is null");
+        }
+      });
+    }
+
+    // otherwise, compare to default settings and set accordingly
+    SettingVars.Settings = settingsToLoad;
+    activateStateUpdateWidgets(null);
+  });
+
   ApiUtils.checkForConnection((has) {
-    bool _has = has;
-    print(_has);
+    print(has);
     runApp(
       Main(
-        has_internet: _has,
+        has_internet: has as bool,
       ),
     );
   });
@@ -27,33 +61,18 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: clean up this setup
-    JsonFileManager m = JsonFileManager();
-
-    print("Processing...");
-    m.processDifferences(SettingVars.SETTINGS_FILE).then((_) {
-      print("Done");
-      m.loadFromFile(SettingVars.SETTINGS_FILE).then((settings) {
-        if (settings != null) {
-          List<Setting> sets = [];
-          for (var set in settings) {
-            sets.add(Setting.fromJson(set));
-          }
-          SettingVars.Settings = sets;
-        } else {
-          print("null");
-        }
-      });
-    });
-
+   
     // TODO
-    Setting? host = SettingVars.getByName("Server hostname");
-    if (host != null) {
-      ApiUtils.setHost(host.setting);
-    } else {
-      // TODO: show erro screen
-      print("ERROR: could not get BASE_URL from settings");
-    }
+    addWidgetlessStateUpdator(() {
+      StringSetting? host = SettingVars.getByName("Server hostname");
+      if (host != null) {
+        print("host: ${host.value}");
+        ApiUtils.setHost(host.value);
+      } else {
+        // TODO: show erro screen
+        print("ERROR: could not get BASE_URL from settings");
+      }
+    });
 
     return MaterialApp(
       builder: ((context, child) {

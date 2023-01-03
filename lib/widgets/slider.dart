@@ -4,20 +4,20 @@ import 'package:flutter/src/widgets/framework.dart';
 
 import 'package:flutter/material.dart';
 
-class Slider extends StatefulWidget {
+class CustomSlider extends StatefulWidget {
   final Widget child;
-  final double minValue;
-  final double maxValue;
-  double defaultValue;
+  final num minValue;
+  final num maxValue;
+  num defaultValue;
   
-  Slider({super.key, required this.child, required this.minValue, required this.maxValue, required this.defaultValue});
+  CustomSlider({super.key, required this.child, required this.minValue, required this.maxValue, required this.defaultValue});
 
   @override
-  State<Slider> createState() => _SliderState();
+  State<CustomSlider> createState() => _CustomSliderState();
 
 }
 
-class _SliderState extends State<Slider> {
+class _CustomSliderState extends State<CustomSlider> {
   @override
   void initState() {
     super.initState();
