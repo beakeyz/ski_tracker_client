@@ -101,7 +101,9 @@ class SettingVars {
   static List<Setting> DefaultSettings = [
     BoolSetting("I know what i'm doing", BOOL_SETTING_TYPE, false),
     StringSetting("Server hostname", STRING_SETTING_TYPE, "192.168.0.45:4000"),
-    SliderSetting("Frequency", SLIDER_SETTING_TYPE, 2, 1, 10),
+    SliderSetting("Frequency", SLIDER_SETTING_TYPE, 1.0, 10.0, 1),
+    BoolSetting("One more time", BOOL_SETTING_TYPE, true),
+    BoolSetting("or not", BOOL_SETTING_TYPE, true),
   ];
 
   static List<Setting> Settings = [];

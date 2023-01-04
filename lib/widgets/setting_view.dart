@@ -122,8 +122,25 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
       );
     } else if (widget.settingField is SliderSetting) {
       SliderSetting setting = widget.settingField;
-      
-      return CustomSlider(minValue: setting.minValue, maxValue: setting.maxValue, defaultValue: setting.value, child: widget);
+      return Slider(
+        value: (setting.value).toDouble(),
+        onChanged: (new_value) {
+          if (setting.value is int) {
+            setState(() {
+              setting.value = new_value.toInt();
+            });
+          } else {
+            setState(() {
+              setting.value = (new_value);
+            });
+          }
+          print("${new_value}");
+          print("${setting.value}");
+        },
+        min: setting.minValue.toDouble(),
+        max: setting.maxValue.toDouble(),
+      );
+      //return CustomSlider(minValue: setting.minValue, maxValue: setting.maxValue, defaultValue: setting.value, child: widget);
     }
 
     return Container(

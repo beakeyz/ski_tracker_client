@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 class ListScreen extends StatefulWidget {
+
   const ListScreen({Key? key}) : super(key: key);
 
   @override
@@ -33,6 +34,7 @@ class _ListScreenState extends State<ListScreen> {
   @override
   void initState() {
     super.initState();
+
     print("loading the lists...");
     if (App.hasServer) {
       ApiUtils.makeRequest(GET_JOKES, "get", (res) {

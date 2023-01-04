@@ -9,18 +9,19 @@ class JsonFileManager extends FileManager {
     checkFile(file, true, (success) {
       if (success != null && success is File) {
         String data = success.readAsStringSync();
+        dynamic thing;
         try {
-          List<dynamic> thing = jsonDecode(data);
-          callback(thing);
+          thing = jsonDecode(data) as List<dynamic>;
         } catch (e) {
           try {
-            dynamic thing = jsonDecode(data);
-            callback(thing);
+            thing = jsonDecode(data);
           } catch (e) {
             print("Double fault while trying to decode sjit");
             callback(null);
+            return;
           }
         }
+        callback(thing);
       }  
     });
   }
@@ -37,25 +38,40 @@ class JsonFileManager extends FileManager {
       }
       print("returning funnie");
       List<Setting> ret = [];
-      for (var s in value) {
-        Setting setting = EmptySetting.fromJson(s);
 
-        switch (setting.type) {
-          case BOOL_SETTING_TYPE:
-            setting = BoolSetting.fromJson(s);
-            ret.add(setting);
+      for (Setting setting in SettingVars.DefaultSettings) {
+        bool foundThisSetting = false;
+        for (var _loadedSetting in value) {
+          Setting loadedSetting = EmptySetting.fromJson(_loadedSetting);
+
+          // json has defaultsetting entry
+          if (loadedSetting.name == setting.name) {
+            switch (loadedSetting.type) {
+              case BOOL_SETTING_TYPE:
+                loadedSetting = BoolSetting.fromJson(_loadedSetting);
+                break;
+              case STRING_SETTING_TYPE:
+                loadedSetting = StringSetting.fromJson(_loadedSetting);
+                break;
+              case SLIDER_SETTING_TYPE:
+                loadedSetting = SliderSetting.fromJson(_loadedSetting);
+                if (loadedSetting is SliderSetting) {
+                  loadedSetting.maxValue = (setting as SliderSetting).maxValue;
+                  loadedSetting.minValue = (setting as SliderSetting).minValue;
+                }
+                break;
+              case -1:
+                // TODO: add invalid setting type
+                break;
+            }
+            ret.add(loadedSetting);
+            foundThisSetting = true;
             break;
-          case STRING_SETTING_TYPE:
-            setting = StringSetting.fromJson(s);
-            ret.add(setting);
-            break;
-          case SLIDER_SETTING_TYPE:
-            setting = SliderSetting.fromJson(s);
-            ret.add(setting);
-            break;
-          case -1:
-            // TODO: add invalid setting type
-            break;
+          }
+        }
+
+        if (!foundThisSetting) {
+          ret.add(setting);
         }
       }
       print("DEBUG: returned json-backed settings");

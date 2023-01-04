@@ -28,7 +28,7 @@ class _ListFocusState extends State<ListFocus> {
             onTap: () {
               ScreenSwitcher.popScreen(context);
             },
-            child: const Icon(Icons.arrow_back_ios_new, size: 35),
+            child: const Icon(Icons.arrow_back_ios_new, size: 25),
           ),
           Flexible(
             flex: 1,

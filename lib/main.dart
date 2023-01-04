@@ -20,6 +20,18 @@ void main() {
 
   print("Processing...");
 
+  // TODO
+  addWidgetlessStateUpdator(() {
+    StringSetting? host = SettingVars.getByName("Server hostname");
+    if (host != null) {
+      print("host: ${host.value}");
+      ApiUtils.setHost(host.value);
+    } else {
+      // TODO: show erro screen
+      print("ERROR: could not get BASE_URL from settings");
+    }
+  });
+
   // fetch settings in json
   m.fetchSettings((settingsToLoad) {
     // - if json does not exist, make it and load default settings into it
@@ -61,18 +73,6 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
-    // TODO
-    addWidgetlessStateUpdator(() {
-      StringSetting? host = SettingVars.getByName("Server hostname");
-      if (host != null) {
-        print("host: ${host.value}");
-        ApiUtils.setHost(host.value);
-      } else {
-        // TODO: show erro screen
-        print("ERROR: could not get BASE_URL from settings");
-      }
-    });
 
     return MaterialApp(
       builder: ((context, child) {

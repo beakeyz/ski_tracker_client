@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: () {
                       //TODO
                     },
-                    child: const Icon(Icons.wifi_off_rounded, size: 35),
+                    child: const Icon(Icons.wifi_off_rounded, size: 25),
                   )
                 : const SizedBox(),
             Flexible(child: Container()),

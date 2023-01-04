@@ -98,20 +98,20 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: Center(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
-                child: Container(),
                 flex: 2,
+                child: Container(),
               ),
               const Text(
                 "Input",
                 textScaleFactor: 4,
               ),
               const SizedBox(height: 50),
-              TextInputField(editingController: summaryController, hintText: "Brief description   💫", textInputType: TextInputType.text, boxWidth: 290),
+              TextInputField(editingController: summaryController, hintText: "Brief description   💫", textInputType: TextInputType.text),
               const SizedBox(
                 height: 10,
               ),

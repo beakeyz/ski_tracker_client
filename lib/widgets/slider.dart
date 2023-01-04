@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -35,6 +37,28 @@ class _CustomSliderState extends State<CustomSlider> {
       alignment: Alignment.center,
       padding: const EdgeInsets.symmetric(vertical: 14),
       color: Colors.amber,
+      child: Row(
+        children: [
+          Flexible(
+            flex: 100,
+            child: Container()
+          ),
+          Container(
+            width: 25,
+            height: 25,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+              color: Colors.blue,
+            ),
+          ),
+          Flexible(
+            flex: 100,
+            child: Container()
+          ),
+        ],
+      ),
     );
   }
 }
