@@ -61,11 +61,15 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
     if (widget.settingField is StringSetting) {
       StringSetting setting = widget.settingField;
         return Container(
-          height: 100,
+          height: 75,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(setting.name, style: const TextStyle(fontSize: 14)),
+              SizedBox(
+                height: 5,
+                child: Container(),
+              ),
               Expanded(
                 child: TextInputField(editingController: settingController, hintText: "this should BE something", textInputType: TextInputType.text),
               ),
@@ -89,32 +93,59 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
             }
           });
         },
-        child: Container(
+        child: SizedBox(
           height: 45,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: PRIMARY_COLOR, width: 2),
-          ),
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(
-                width: 10,
+              Flexible(child: Container()),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text(setting.name, softWrap: true, style: const TextStyle(fontFamily: "Open Sans", fontSize: 16)),
+                  Flexible(flex: 1, child: Container()),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(30)),
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.grey,
+                          )
+                        ),
+                      ),
+                      AnimatedBuilder(
+                        animation: animationController.view,
+                        builder: ((context, child) {
+                          return Transform.scale(
+                            scale: animationController.value,
+                            child: child,
+                          );
+                        }),
+                        child: CustomCheckBox(checked: setting.value),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                ],
               ),
-              Text(setting.name, softWrap: true, style: TextStyle(fontFamily: "Open Sans", fontSize: 16)),
-              Flexible(flex: 1, child: Container()),
-              AnimatedBuilder(
-                animation: animationController.view,
-                builder: ((context, child) {
-                  return Transform.scale(
-                    scale: animationController.value,
-                    child: child,
-                  );
-                }),
-                child: CustomCheckBox(checked: setting.value),
-              ),
-              const SizedBox(
-                width: 10,
+              Flexible(child: Container()),
+              SizedBox(
+                height: 1,
+                width: MediaQuery.of(context).size.width - 80,
+                child: Container(
+                  color: Color.fromARGB(176, 133, 132, 132),
+                ),
               ),
             ],
           ),
@@ -122,23 +153,37 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
       );
     } else if (widget.settingField is SliderSetting) {
       SliderSetting setting = widget.settingField;
-      return Slider(
-        value: (setting.value).toDouble(),
-        onChanged: (new_value) {
-          if (setting.value is int) {
-            setState(() {
-              setting.value = new_value.toInt();
-            });
-          } else {
-            setState(() {
-              setting.value = (new_value);
-            });
-          }
-          print("${new_value}");
-          print("${setting.value}");
-        },
-        min: setting.minValue.toDouble(),
-        max: setting.maxValue.toDouble(),
+      return Container(
+        child: Column(
+          children: [
+            Text(
+              "${setting.name}: ${setting.value}",
+              style: const TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            Slider(
+              activeColor: FOREGROUND_COLOR,
+              inactiveColor: SECONDARY_COLOR,
+              value: (setting.value).toDouble(),
+              onChanged: (new_value) {
+                if (setting.value is int) {
+                  setState(() {
+                    setting.value = new_value.toInt();
+                  });
+                } else {
+                  setState(() {
+                    setting.value = (new_value);
+                  });
+                }
+                print("${new_value}");
+                print("${setting.value}");
+              },
+              min: setting.minValue.toDouble(),
+              max: setting.maxValue.toDouble(),
+            ),
+          ],
+        ),
       );
       //return CustomSlider(minValue: setting.minValue, maxValue: setting.maxValue, defaultValue: setting.value, child: widget);
     }

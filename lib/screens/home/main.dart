@@ -4,9 +4,13 @@ import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/DataEntry.dart';
 import 'package:dadjoke_client/core/models/LocalStorage.dart';
+import 'package:dadjoke_client/core/res/DataFetcher.dart';
+import 'package:dadjoke_client/core/res/FileManager.dart';
+import 'package:dadjoke_client/core/res/JsonFileManager.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/widgets/button.dart';
+import 'package:dadjoke_client/widgets/infoBox.dart';
 import 'package:dadjoke_client/widgets/input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -102,36 +106,10 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(
-                flex: 2,
-                child: Container(),
-              ),
-              const Text(
-                "Input",
-                textScaleFactor: 4,
-              ),
-              const SizedBox(height: 50),
-              TextInputField(editingController: summaryController, hintText: "Brief description   💫", textInputType: TextInputType.text),
-              const SizedBox(
-                height: 10,
-              ),
-              TextInputField(editingController: contentController, hintText: "Content   💫", textInputType: TextInputType.text),
-              Flexible(
-                child: Container(),
-                flex: 2,
-              ),
-              Button(
-                callback: () {
-                  if (App.hasServer) {
-                    processInputToServer();
-                  } else {
-                    processInputLocally();
-                  }
-                },
-                child: Text(responseText),
-              ),
-              const SizedBox(
-                height: 50,
+              Text("Data"),
+              InfoBox(
+                title: "Current position",
+                updateFunction: DataFetcher.getPhysicalDeviceHeight()
               ),
             ],
           ),

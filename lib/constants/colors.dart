@@ -5,3 +5,4 @@ const PRIMARY_COLOR = Color.fromARGB(255, 255, 255, 255);
 const SECONDARY_COLOR = Color.fromARGB(181, 63, 63, 63);
 const BLUR_COLOR = Color.fromARGB(171, 44, 44, 44);
 const BTN_COLOR = Color.fromARGB(144, 54, 150, 189);
+const FOREGROUND_COLOR = Color.fromARGB(223, 106, 44, 128);

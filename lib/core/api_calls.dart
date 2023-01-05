@@ -83,7 +83,10 @@ class ApiUtils {
 
   //TODO clean this ABSOLUTE SHITHEAP up, ty
   static void makeRequest(String path, String method, Function callback, Function? errCallback) async {
-    if (!lock.aquireStateLock()) return;
+    if (!lock.aquireStateLock()){
+      errCallback?.call();
+      return;
+    }
     try {
       switch (method) {
         case "Get":
@@ -106,11 +109,13 @@ class ApiUtils {
           await http.get(Uri.http(BASE_URL, path)).then((res) => callback(res));
           print("btw, u didnt specify a valid method -_-");
       }
+      return;
     } catch (e) {
       print("fuck");
       print(e.toString());
       errCallback?.call();
     }
+    errCallback?.call();
     lock.releaseStateLock();
   }
 

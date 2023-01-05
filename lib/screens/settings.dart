@@ -70,7 +70,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+                decoration: const BoxDecoration(
+                  color: SECONDARY_COLOR,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(185, 117, 107, 118),
+                      blurRadius: 15,
+                      spreadRadius: 0,
+                      blurStyle: BlurStyle.outer
+                    )
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
                 child: Button(
                   callback: () {
                     // TODO save

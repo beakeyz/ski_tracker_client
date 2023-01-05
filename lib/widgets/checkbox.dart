@@ -27,9 +27,8 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
         ),
         boxShadow: [
           BoxShadow(
-            blurRadius: 10,
-            spreadRadius: 10,
-            offset: Offset(0.5, 3),
+            blurRadius: 2,
+            spreadRadius: 4,
             color: BLUR_COLOR,
           )
         ],
