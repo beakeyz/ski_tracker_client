@@ -1,3 +1,4 @@
+import 'package:dadjoke_client/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -30,33 +31,40 @@ class _InfoBoxState extends State<InfoBox> {
   @override
   Widget build(BuildContext context) {
 
-    return FutureBuilder(
-      future: widget.updateFunction,
-      builder: ((context, snapshot) {
-        switch (snapshot.connectionState){
-          case ConnectionState.none:
-            // TODO: Handle this case.
-            break;
-          case ConnectionState.waiting:
-            // TODO: Handle this case.
-            break;
-          case ConnectionState.active:
-            // TODO: Handle this case.
-            break;
-          case ConnectionState.done:
-            Position? pos = snapshot.data as Position?;
+    return Container(
+      width: MediaQuery.of(context).size.width / 2 - 10,
+      height: 55,
+      decoration: const BoxDecoration(
+        color: SECONDARY_COLOR,
+      ),
+      child: FutureBuilder(
+        future: widget.updateFunction,
+        builder: ((context, snapshot) {
+          switch (snapshot.connectionState){
+            case ConnectionState.none:
+              // TODO: Handle this case.
+              break;
+            case ConnectionState.waiting:
+              // TODO: Handle this case.
+              break;
+            case ConnectionState.active:
+              // TODO: Handle this case.
+              break;
+            case ConnectionState.done:
+              Position? pos = snapshot.data as Position?;
 
-            if (pos != null) {
-              return Container(
-                child: Text("Yay data =D ${pos.latitude}"),
-              );
-            }
+              if (pos != null) {
+                return Container(
+                  child: Text("Yay data =D ${pos.latitude}"),
+                );
+              }
 
-        }
-        return Container(
-          child: Text("No data =("),
-        ); 
-      })
+          }
+          return Container(
+            child: Text("No data =("),
+          ); 
+        })
+      ),
     );
   }
 }
