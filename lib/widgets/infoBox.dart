@@ -32,11 +32,13 @@ class _InfoBoxState extends State<InfoBox> {
   Widget build(BuildContext context) {
 
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       width: MediaQuery.of(context).size.width / 2 - 10,
       height: 55,
       decoration: const BoxDecoration(
         color: SECONDARY_COLOR,
       ),
+      alignment: Alignment.center,
       child: FutureBuilder(
         future: widget.updateFunction,
         builder: ((context, snapshot) {
