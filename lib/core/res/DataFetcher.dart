@@ -3,7 +3,7 @@ import 'package:geolocator/geolocator.dart';
 
 class DataFetcher {
 
-  static Future<Position?> getPhysicalDeviceHeight() async {
+  static Future<Position?> getPhysicalDevicePosition() async {
     bool service = await Geolocator.isLocationServiceEnabled();
     print("Started fetch");
     if (!service) {
@@ -15,7 +15,15 @@ class DataFetcher {
 
     switch (locationPermission) {
       case LocationPermission.denied:
-      print("no perms 1");
+        LocationPermission perm = await Geolocator.requestPermission();
+
+        //could not type the or opperator while writing this -_-
+        if (perm == LocationPermission.always) {
+          return DataFetcher.getPhysicalDevicePosition();
+        }
+        if (perm == LocationPermission.whileInUse) {
+          return DataFetcher.getPhysicalDevicePosition();
+        }
         return null;
       case LocationPermission.deniedForever:
       print("no perms 2");
@@ -26,10 +34,13 @@ class DataFetcher {
         return null;
       case LocationPermission.whileInUse:
       case LocationPermission.always:
-      print("perms");
         return await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high
         );
     }
+  }
+
+  static Future<Position?> getPhysicalDeviceSpeed() async {
+
   }
 }

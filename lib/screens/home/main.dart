@@ -106,10 +106,47 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text("Data"),
-              InfoBox(
-                title: "Current position",
-                updateFunction: DataFetcher.getPhysicalDeviceHeight()
+              const Text("Data"),
+              const SizedBox(
+                height: 35,
+              ),
+              Flex(
+                direction: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InfoBox(
+                    title: "Height",
+                    type: InfoBoxInfoType.HEIGHT,
+                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                  ),
+                  InfoBox(
+                    title: "Speed",
+                    type: InfoBoxInfoType.SPEED,
+                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              // test
+              Flex(
+                direction: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  InfoBox(
+                    title: "Height",
+                    type: InfoBoxInfoType.HEIGHT,
+                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                  ),
+                  InfoBox(
+                    title: "Speed",
+                    type: InfoBoxInfoType.SPEED,
+                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                  ),
+                ],
               ),
             ],
           ),
