@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dadjoke_client/constants/api_endpoints.dart';
@@ -10,12 +11,15 @@ import 'package:dadjoke_client/core/res/JsonFileManager.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/widgets/button.dart';
-import 'package:dadjoke_client/widgets/infoBox.dart';
+import 'package:dadjoke_client/widgets/posInfoBox.dart';
 import 'package:dadjoke_client/widgets/input_field.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart';
 
 class MainScreen extends StatefulWidget {
+
+
   const MainScreen({Key? key}) : super(key: key);
 
   @override
@@ -23,10 +27,18 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final TextEditingController summaryController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  //final TextEditingController summaryController = TextEditingController();
+  //final TextEditingController contentController = TextEditingController();
 
   String responseText = "Send";
+
+  double maxSpeed = 0;
+  bool isTracking = false;
+  int lastTrackTime = 0;
+  int distanceTracked_metres = 0;
+  DateTime? trackStartTime;
+  Position? currentPosition;
+  StreamSubscription<Position>? currentPositionSubscription;
 
   void setResponseText(String new_string) {
     if (new_string.isEmpty) {
@@ -43,22 +55,53 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+        
+    currentPositionSubscription ??= Geolocator.getPositionStream(locationSettings: const LocationSettings()).listen((event) {
+
+      final int deltaTime = event.timestamp!.millisecond - lastTrackTime;
+
+      // sadly we do have to rerender on every location update =(
+      setState(() {
+        if (isTracking) {
+          trackStartTime ??= event.timestamp!;
+        } else {
+          // sanity
+          trackStartTime ??= null;
+        }
+
+        if (event.speed > maxSpeed) {
+          maxSpeed = event.speed;
+        }
+        currentPosition = event;
+        lastTrackTime = event.timestamp!.millisecond;
+      });
+
+      if (isTracking) {
+        // only do meaningful things with the data once we are tracking
+
+        double deltaTime_seconds = deltaTime / 1000;
+        distanceTracked_metres += (event.speed * deltaTime_seconds).toInt();
+      }
+    },);
+
+    currentPositionSubscription?.resume();
   }
 
   @override
   void dispose() {
     super.dispose();
-    summaryController.dispose();
+    //summaryController.dispose();
+
+    currentPositionSubscription?.pause();
   }
 
-  void processInputToServer() {
-    String summary = summaryController.text;
-    String joke = contentController.text;
+  void processTrackToServer() {
+    /*
     String time = DateUtils.dateOnly(DateTime.now()).toString().split(" ")[0];
     print(time);
     // We are NOT going to trust the client about what the index is, so this will be a funny number =)
     // We ARE going to trust the user with the strings it sends (for now)
-    DataEntry entry = DataEntry(Summary: summary, joke: joke, Date: time, index: 69);
+    DataEntry entry = DataEntry(Summary: "", joke: "", Date: time, index: 69);
     var header = {
       "Content-Type": "application/json",
       "Accept": "application/json",
@@ -72,33 +115,31 @@ class _MainScreenState extends State<MainScreen> {
       setResponseText(r.body);
       if (r.body.contains("Success")) {
         setState(() {
-          summaryController.text = "";
-          contentController.text = "";
         });
       }
     }, () {
       setResponseText("Could not connect!");
     });
+    */
   }
 
-  void processInputLocally() {
-    String summary = summaryController.text;
-    String joke = contentController.text;
-    String time = DateUtils.dateOnly(DateTime.now()).toString().split(" ")[0];
+  void processTrackLocally() {
+    String time = DateUtils.dateOnly(trackStartTime!).toString().split(" ")[0];
+    double max_speed_km_u = (maxSpeed * 3.6);
+    int distance_metres = distanceTracked_metres;
 
     // We are NOT going to trust the client about what the index is, so this will be a funny number =)
     // We ARE going to trust the user with the strings it sends (for now)
-    DataEntry entry = DataEntry(Summary: summary, joke: joke, Date: time, index: 69);
+    DataEntry entry = DataEntry(distance: distance_metres, max_speed: max_speed_km_u, Date: time, index: 69);
     LocalStorage().saveToStorage(entry, () {
       setState(() {
-          summaryController.text = "";
-          contentController.text = "";
-        });
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Center(
         child: Container(
@@ -115,39 +156,41 @@ class _MainScreenState extends State<MainScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InfoBox(
+                  PositionInfoBox(
                     title: "Height",
                     type: InfoBoxInfoType.HEIGHT,
-                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                    data: currentPosition,
                   ),
-                  InfoBox(
+                  PositionInfoBox(
                     title: "Speed",
                     type: InfoBoxInfoType.SPEED,
-                    updateFunction: DataFetcher.getPhysicalDevicePosition()
+                    data: currentPosition,
                   ),
                 ],
               ),
               const SizedBox(
                 height: 50,
               ),
-              // test
-              Flex(
-                direction: Axis.horizontal,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InfoBox(
-                    title: "Height",
-                    type: InfoBoxInfoType.HEIGHT,
-                    updateFunction: DataFetcher.getPhysicalDevicePosition()
-                  ),
-                  InfoBox(
-                    title: "Speed",
-                    type: InfoBoxInfoType.SPEED,
-                    updateFunction: DataFetcher.getPhysicalDevicePosition()
-                  ),
-                ],
+              Flexible(
+                flex: 2,
+                child: Container(),
               ),
+              Button(
+                callback: () {
+                  if (isTracking) {
+                    // stop tracking and save tracked info
+                    processTrackLocally();
+                    trackStartTime = null;
+                  } else {
+                    // start tracking so that we save position info and compute it
+                  }
+                  setState(() {
+                    isTracking = !isTracking;
+                  });
+                },
+                child: const Text("Hi"),
+              ),
+              const SizedBox(height: 15,),
             ],
           ),
         ),

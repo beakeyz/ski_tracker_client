@@ -4,6 +4,7 @@ import 'package:dadjoke_client/constants/api_endpoints.dart';
 import 'package:dadjoke_client/constants/colors.dart';
 import 'package:dadjoke_client/core/api_calls.dart';
 import 'package:dadjoke_client/core/models/LocalStorage.dart';
+import 'package:dadjoke_client/core/res/DataFetcher.dart';
 import 'package:dadjoke_client/core/screen_switcher.dart';
 import 'package:dadjoke_client/main.dart';
 import 'package:dadjoke_client/screens/about.dart';
@@ -44,18 +45,20 @@ class _LoginScreenState extends State<LoginScreen> {
   void handleBtnClick() {
     updateWaiting(true);
 
-    ApiUtils.checkUrlForConnection(ApiUtils.BASE_URL, (conectionExists) {
-      if (conectionExists) {
-        ApiUtils.makeRequest(TEST_API, "get", (res) {
-          App.hasServer = true;
-          updateWaiting(false);
-          ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
-        }, () {
+    DataFetcher.getPhysicalDevicePosition().then((pos) {
+      ApiUtils.checkUrlForConnection(ApiUtils.BASE_URL, (conectionExists) {
+        if (conectionExists) {
+          ApiUtils.makeRequest(TEST_API, "get", (res) {
+            App.hasServer = true;
+            updateWaiting(false);
+            ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+          }, () {
+            noConnection();
+          });
+        } else {
           noConnection();
-        });
-      } else {
-        noConnection();
-      }
+        }
+      });
     });
   }
 

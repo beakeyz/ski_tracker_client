@@ -82,7 +82,7 @@ class _ListScreenState extends State<ListScreen> {
                     itemCount: _entries == null ? 0 : _entries!.size,
                     itemBuilder: ((context, index) {
                       return ListEntry(
-                        Joke: _entries!.list[index],
+                        dataEntry: _entries!.list[index],
                       );
                     }),
                   ),

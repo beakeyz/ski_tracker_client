@@ -62,7 +62,7 @@ class _ListFocusState extends State<ListFocus> {
               width: 10,
             ),
             Text(
-              widget.tag.Joke.Date,
+              widget.tag.dataEntry.Date,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
             Flexible(child: Container()),
@@ -98,7 +98,7 @@ class _ListFocusState extends State<ListFocus> {
                 Container(
                   width: 300,
                   child: Text(
-                    widget.tag.Joke.Summary,
+                    widget.tag.dataEntry.Date,
                     style: const TextStyle(
                       fontSize: 32,
                       overflow: TextOverflow.clip,
@@ -119,7 +119,7 @@ class _ListFocusState extends State<ListFocus> {
                   width: MediaQuery.of(context).size.width - 20,
                   padding: EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    widget.tag.Joke.joke,
+                    "Distance: ${widget.tag.dataEntry.distance.toString()} meter",
                     overflow: TextOverflow.clip,
                   ),
                 ),

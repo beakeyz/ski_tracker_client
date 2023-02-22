@@ -8,8 +8,8 @@ import "package:flutter/material.dart";
 import 'package:flutter_bounce/flutter_bounce.dart';
 
 class ListEntry extends StatefulWidget {
-  final DataEntry Joke;
-  ListEntry({Key? key, required this.Joke}) : super(key: key);
+  final DataEntry dataEntry;
+  ListEntry({Key? key, required this.dataEntry}) : super(key: key);
 
   @override
   State<ListEntry> createState() => _ListEntryState();
@@ -51,7 +51,7 @@ class _ListEntryState extends State<ListEntry> {
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
-                    widget.Joke.Summary,
+                    widget.dataEntry.Date,
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: const TextStyle(
@@ -60,7 +60,7 @@ class _ListEntryState extends State<ListEntry> {
                   ),
                 ),
                 Text(
-                  widget.Joke.Date,
+                  widget.dataEntry.Date,
                   softWrap: false,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
@@ -69,7 +69,7 @@ class _ListEntryState extends State<ListEntry> {
               ],
             ),
             Text(
-              widget.Joke.index.toString(),
+              widget.dataEntry.index.toString(),
               style: TextStyle(fontSize: 21),
             ),
           ],

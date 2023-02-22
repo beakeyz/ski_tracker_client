@@ -39,8 +39,4 @@ class DataFetcher {
         );
     }
   }
-
-  static Future<Position?> getPhysicalDeviceSpeed() async {
-
-  }
 }
