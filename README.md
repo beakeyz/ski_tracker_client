@@ -1,6 +1,11 @@
 # dadjoke_client
 
-A new Flutter project.
+An epic flutter project
+
+code is old, don't get any brain damage plz
+This project has had its fair share of abuse, so it now no longer really serves as
+a 'client' for the dadjoke generator thingy I had in mind first. I honestly have no clue what it really
+is, besides a funny look into my brain a few years back lmaooo
 
 ## Getting Started
 
