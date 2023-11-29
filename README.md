@@ -1,4 +1,4 @@
-# dadjoke_client
+# Ski Tracker Client (STC)
 
 An epic flutter project
 

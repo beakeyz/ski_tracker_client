@@ -1,10 +1,10 @@
 import 'dart:ffi';
 
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/models/Settings.dart';
-import 'package:dadjoke_client/widgets/checkbox.dart';
-import 'package:dadjoke_client/widgets/input_field.dart';
-import 'package:dadjoke_client/widgets/slider.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/widgets/checkbox.dart';
+import 'package:skitracker_client/widgets/input_field.dart';
+import 'package:skitracker_client/widgets/slider.dart';
 import 'package:flutter/material.dart';
 
 class SettingView extends StatefulWidget {

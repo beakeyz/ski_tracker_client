@@ -1,4 +1,4 @@
-import 'package:dadjoke_client/core/updates/StateUpdater.dart';
+import 'package:skitracker_client/core/updates/StateUpdater.dart';
 import 'package:flutter/material.dart';
 
 class StateUpdateWidget extends StatelessWidget {

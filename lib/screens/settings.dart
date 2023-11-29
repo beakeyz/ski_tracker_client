@@ -1,9 +1,9 @@
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/Settings.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
-import 'package:dadjoke_client/widgets/button.dart';
-import 'package:dadjoke_client/widgets/setting_view.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/api_calls.dart';
+import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/core/screen_switcher.dart';
+import 'package:skitracker_client/widgets/button.dart';
+import 'package:skitracker_client/widgets/setting_view.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatefulWidget {

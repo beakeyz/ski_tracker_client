@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dadjoke_client/core/res/FileManager.dart';
+import 'package:skitracker_client/core/res/FileManager.dart';
 import 'package:flutter/material.dart';
 
 const String _Setting_json_name_str = "SettingName";

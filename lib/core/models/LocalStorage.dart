@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dadjoke_client/core/models/DataEntry.dart';
-import 'package:dadjoke_client/core/models/DataList.dart';
-import 'package:dadjoke_client/core/res/JsonFileManager.dart';
+import 'package:skitracker_client/core/models/DataEntry.dart';
+import 'package:skitracker_client/core/models/DataList.dart';
+import 'package:skitracker_client/core/res/JsonFileManager.dart';
 
 import '../res/FileManager.dart';
 
@@ -54,5 +54,58 @@ class LocalStorage extends JsonFileManager {
     } catch (ex) {
       print(ex);
     }
+  }
+
+  bool removeFromStorage(int index, Function? finishedCallback)
+  {
+    DataList list;
+    DataEntry? removedEntry;
+
+    try {
+      loadStorage((_list) {
+        if (_list == null) {
+          return false;
+        }
+
+        list = _list;
+
+        if (index >= list.size) {
+          return false;
+        }
+
+        removedEntry = list.list.removeAt(index);
+
+        /* Seems like the entry does not exist =/ */
+        if (removedEntry == null) {
+          return false;
+        }
+
+        list.size--;
+
+        for (int i = index; i < list.size; i++) {
+          removedEntry = list.list[i];
+
+          if (removedEntry == null) {
+            break;
+          }
+
+          /* Resolve every index after this one */
+          removedEntry!.index--;
+        }
+
+        /* Write our changes to disk */
+        String jsonString = jsonEncode(list);
+        write(PATH, jsonString);
+
+        if (finishedCallback != null) {
+          finishedCallback();
+        }
+      });
+    } catch (ex) {
+      print(ex);
+      return false;
+    }
+
+    return true;
   }
 }

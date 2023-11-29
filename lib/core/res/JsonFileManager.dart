@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dadjoke_client/core/models/Settings.dart';
-import 'package:dadjoke_client/core/res/FileManager.dart';
+import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/core/res/FileManager.dart';
 
 class JsonFileManager extends FileManager {
   void loadFromFile(String file, Function callback) {

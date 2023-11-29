@@ -1,13 +1,14 @@
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/constants/main_screens.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
-import 'package:dadjoke_client/main.dart';
-import 'package:dadjoke_client/screens/settings.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/constants/main_screens.dart';
+import 'package:skitracker_client/core/screen_switcher.dart';
+import 'package:skitracker_client/main.dart';
+import 'package:skitracker_client/screens/settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final int initialPage;
+  const HomeScreen({Key? key, required this.initialPage}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController();
+    pageController = PageController(initialPage: widget.initialPage);
   }
 
   @override
@@ -46,9 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
       length: 2,
       child: Scaffold(
         body: PageView(
-          children: main_screens,
           controller: pageController,
           onPageChanged: changePageEvent,
+          children: mainScreens,
           //physics: const NeverScrollableScrollPhysics(),
         ),
         appBar: AppBar(
@@ -60,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
             !App.hasServer
                 ? InkWell(
                     onTap: () {
-                      //TODO
+                      //TODO: What here?
                     },
                     child: const Icon(Icons.wifi_off_rounded, size: 25),
                   )

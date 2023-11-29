@@ -1,15 +1,15 @@
 import 'dart:io';
 
-import 'package:dadjoke_client/constants/api_endpoints.dart';
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/LocalStorage.dart';
-import 'package:dadjoke_client/core/res/DataFetcher.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
-import 'package:dadjoke_client/main.dart';
-import 'package:dadjoke_client/screens/about.dart';
-import 'package:dadjoke_client/screens/home.dart';
-import 'package:dadjoke_client/widgets/button.dart';
+import 'package:skitracker_client/constants/api_endpoints.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/api_calls.dart';
+import 'package:skitracker_client/core/models/LocalStorage.dart';
+import 'package:skitracker_client/core/res/DataFetcher.dart';
+import 'package:skitracker_client/core/screen_switcher.dart';
+import 'package:skitracker_client/main.dart';
+import 'package:skitracker_client/screens/about.dart';
+import 'package:skitracker_client/screens/home.dart';
+import 'package:skitracker_client/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,11 +21,11 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool is_waiting = false;
+  bool isWaiting = false;
 
   void updateWaiting(bool new_val) {
     setState(() {
-      is_waiting = new_val;
+      isWaiting = new_val;
     });
   }
 
@@ -35,10 +35,9 @@ class _LoginScreenState extends State<LoginScreen> {
       //
       if (file != null) {
         LocalStorage().initStorage();
-        print("storage done!");
       }
       updateWaiting(false);
-      ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
+      ScreenSwitcher.gotoScreen(context, const HomeScreen(initialPage: 0), false);
     });
   }
 
@@ -47,17 +46,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
     DataFetcher.getPhysicalDevicePosition().then((pos) {
       ApiUtils.checkUrlForConnection(ApiUtils.BASE_URL, (conectionExists) {
-        if (conectionExists) {
-          ApiUtils.makeRequest(TEST_API, "get", (res) {
-            App.hasServer = true;
-            updateWaiting(false);
-            ScreenSwitcher.gotoScreen(context, const HomeScreen(), false);
-          }, () {
-            noConnection();
-          });
-        } else {
+        if (!conectionExists) {
           noConnection();
+          return;
         }
+
+        /* Make a test request to our API to see if it's online */
+        ApiUtils.makeRequest(TEST_API, "get", (res) {
+          App.hasServer = true;
+          updateWaiting(false);
+          ScreenSwitcher.gotoScreen(context, const HomeScreen(initialPage: 0), false);
+        }, () {
+          /* Nope, go into offline mode */
+          noConnection();
+        });
       });
     });
   }
@@ -70,29 +72,19 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 55),
             width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                tileMode: TileMode.mirror,
-                colors: [
-                  Color.fromARGB(255, 79, 44, 60),
-                  Color.fromARGB(186, 21, 20, 20),
-                ],
-              ),
-            ),
+            color: PRIMARY_COLOR,
+            
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 //things
                 Flexible(
-                  child: Container(),
                   flex: 2,
+                  child: Container(),
                 ),
 
                 SvgPicture.asset(
-                  "assets/dadjoke-icon.svg",
-                  color: PRIMARY_COLOR,
+                  "assets/skitracker-icon.svg",
                   height: 200,
                 ),
                 const SizedBox(height: 71),
@@ -101,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   callback: () {
                     handleBtnClick();
                   },
-                  child: !is_waiting
+                  child: !isWaiting
                       ? const Text(
                           "Get going!",
                         )
@@ -122,14 +114,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     Flexible(child: Container()),
                     InkWell(
                       onTap: () {
-                        if (!is_waiting) {
+                        if (!isWaiting) {
                           ScreenSwitcher.pushScreen(context, const AboutPage());
                         }
                       },
                       child: const SizedBox(
                         width: 200,
                         height: 25,
-                        child: Center(child: Text("About this app", style: TextStyle(fontSize: 23, decoration: TextDecoration.underline))),
+                        child: Center(
+                          child: Text(
+                            "About this app",
+                             style: TextStyle(
+                              fontSize: 23,
+                              decoration: TextDecoration.underline,
+                              color: SECONDARY_COLOR
+                            ), 
+                          )
+                        ),
                       ),
                     ),
                     Flexible(child: Container())

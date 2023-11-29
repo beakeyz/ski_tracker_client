@@ -1,6 +1,6 @@
 
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/screen_switcher.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/material.dart';

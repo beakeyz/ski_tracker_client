@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "dadjoke_client" "\0"
+            VALUE "FileDescription", "skitracker_client" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "dadjoke_client" "\0"
+            VALUE "InternalName", "skitracker_client" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "dadjoke_client.exe" "\0"
-            VALUE "ProductName", "dadjoke_client" "\0"
+            VALUE "OriginalFilename", "skitracker_client.exe" "\0"
+            VALUE "ProductName", "skitracker_client" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

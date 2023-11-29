@@ -1,21 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:dadjoke_client/constants/api_endpoints.dart';
-import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/DataEntry.dart';
-import 'package:dadjoke_client/core/models/LocalStorage.dart';
-import 'package:dadjoke_client/core/res/DataFetcher.dart';
-import 'package:dadjoke_client/core/res/FileManager.dart';
-import 'package:dadjoke_client/core/res/JsonFileManager.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
-import 'package:dadjoke_client/main.dart';
-import 'package:dadjoke_client/widgets/button.dart';
-import 'package:dadjoke_client/widgets/posInfoBox.dart';
-import 'package:dadjoke_client/widgets/input_field.dart';
+import 'package:skitracker_client/core/models/DataEntry.dart';
+import 'package:skitracker_client/core/models/LocalStorage.dart';
+import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/widgets/button.dart';
+import 'package:skitracker_client/widgets/pos_infobox.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -31,56 +22,72 @@ class _MainScreenState extends State<MainScreen> {
   //final TextEditingController contentController = TextEditingController();
 
   String responseText = "Send";
+  SliderSetting? freqSlider;
 
   double maxSpeed = 0;
+  double upDistance = 0;
+  double downDistance = 0;
+  double lastAltitude = 0;
   bool isTracking = false;
   int lastTrackTime = 0;
-  int distanceTracked_metres = 0;
+  int distanceTrackedMetres = 0;
   DateTime? trackStartTime;
   Position? currentPosition;
   StreamSubscription<Position>? currentPositionSubscription;
 
-  void setResponseText(String new_string) {
-    if (new_string.isEmpty) {
+  void setResponseText(String newString) {
+    if (newString.isEmpty) {
       setState(() {
         responseText = "Send";
       });
       return;
     }
     setState(() {
-      responseText = new_string;
+      responseText = newString;
     });
   }
 
   @override
   void initState() {
     super.initState();
-        
+
     currentPositionSubscription ??= Geolocator.getPositionStream(locationSettings: const LocationSettings()).listen((event) {
 
-      final int deltaTime = event.timestamp!.millisecond - lastTrackTime;
+      final int deltaTime = event.timestamp.millisecond - lastTrackTime;
 
       // sadly we do have to rerender on every location update =(
       setState(() {
+        trackStartTime ??= event.timestamp;
+
         if (isTracking) {
-          trackStartTime ??= event.timestamp!;
-        } else {
-          // sanity
-          trackStartTime ??= null;
+          trackStartTime = event.timestamp;
         }
 
         if (event.speed > maxSpeed) {
           maxSpeed = event.speed;
         }
         currentPosition = event;
-        lastTrackTime = event.timestamp!.millisecond;
+
+        if (lastAltitude != 0) {
+          double altitudeDelta = event.altitude - lastAltitude;
+
+          /* Compute the total height difference throughout the track */
+          if (altitudeDelta > 0) {
+            upDistance += altitudeDelta;
+          } else {
+            downDistance += altitudeDelta;
+          }
+        }
+
+        lastAltitude = event.altitude;
+        lastTrackTime = event.timestamp.millisecond;
       });
 
       if (isTracking) {
         // only do meaningful things with the data once we are tracking
 
-        double deltaTime_seconds = deltaTime / 1000;
-        distanceTracked_metres += (event.speed * deltaTime_seconds).toInt();
+        double deltatimeSeconds = deltaTime / 1000;
+        distanceTrackedMetres += (event.speed * deltatimeSeconds).toInt();
       }
     },);
 
@@ -124,17 +131,29 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void processTrackLocally() {
-    String time = DateUtils.dateOnly(trackStartTime!).toString().split(" ")[0];
-    double max_speed_km_u = (maxSpeed * 3.6);
-    int distance_metres = distanceTracked_metres;
 
-    // We are NOT going to trust the client about what the index is, so this will be a funny number =)
-    // We ARE going to trust the user with the strings it sends (for now)
-    DataEntry entry = DataEntry(distance: distance_metres, max_speed: max_speed_km_u, Date: time, index: 69);
-    LocalStorage().saveToStorage(entry, () {
-      setState(() {
+    try {
+      String time = DateUtils.dateOnly(trackStartTime!).toString().split(" ")[0];
+      double maxSpeedKmU = (maxSpeed * 3.6);
+      int distanceMetres = distanceTrackedMetres;
+
+      // NOTE: We are NOT going to trust the client about what the index is, so this will be a funny number =)
+      // We ARE going to trust the user with the strings it sends (for now)
+      DataEntry entry = DataEntry(
+        horizontalDistance: distanceMetres,
+        upDistance: upDistance,
+        downDistance: downDistance,
+        maxSpeed: maxSpeedKmU,
+        date: time,
+        index: 69
+      );
+
+      /* Invoke the local storage manager to save this entry */
+      LocalStorage().saveToStorage(entry, () {
+        setState(() {
+        });
       });
-    });
+    } catch(_) {}
   }
 
   @override
@@ -177,6 +196,11 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Button(
                 callback: () {
+                  /* Don't track if the geolocator is not yet online */
+                  if (trackStartTime == null) {
+                    return;
+                  }
+
                   if (isTracking) {
                     // stop tracking and save tracked info
                     processTrackLocally();
@@ -188,7 +212,14 @@ class _MainScreenState extends State<MainScreen> {
                     isTracking = !isTracking;
                   });
                 },
-                child: const Text("Hi"),
+                child: Text(
+                  trackStartTime == null ?
+                    "Can't start tracking yet!" : 
+                    (isTracking ? 
+                      "Tracking..." :
+                      "Tap to start tracking!"
+                      )
+                ),
               ),
               const SizedBox(height: 15,),
             ],

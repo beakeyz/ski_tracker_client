@@ -1,6 +1,6 @@
 {
-    "name": "dadjoke_client",
-    "short_name": "dadjoke_client",
+    "name": "skitracker_client",
+    "short_name": "skitracker_client",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

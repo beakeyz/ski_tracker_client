@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/models/DataEntry.dart';
-import 'package:dadjoke_client/core/screen_switcher.dart';
-import 'package:dadjoke_client/screens/home/list_focus.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/models/DataEntry.dart';
+import 'package:skitracker_client/core/screen_switcher.dart';
+import 'package:skitracker_client/screens/home/list_focus.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_bounce/flutter_bounce.dart';
 
@@ -19,7 +19,7 @@ class _ListEntryState extends State<ListEntry> {
   @override
   Widget build(BuildContext context) {
     return Bounce(
-      duration: Duration(milliseconds: 75),
+      duration: const Duration(milliseconds: 75),
       onPressed: () {
         ScreenSwitcher.pushScreen(context, ListFocus(tag: widget));
       },
@@ -51,7 +51,7 @@ class _ListEntryState extends State<ListEntry> {
                 Container(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
-                    widget.dataEntry.Date,
+                    widget.dataEntry.date,
                     softWrap: false,
                     overflow: TextOverflow.fade,
                     style: const TextStyle(
@@ -60,7 +60,7 @@ class _ListEntryState extends State<ListEntry> {
                   ),
                 ),
                 Text(
-                  widget.dataEntry.Date,
+                  widget.dataEntry.date,
                   softWrap: false,
                   overflow: TextOverflow.fade,
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
@@ -70,7 +70,7 @@ class _ListEntryState extends State<ListEntry> {
             ),
             Text(
               widget.dataEntry.index.toString(),
-              style: TextStyle(fontSize: 21),
+              style: const TextStyle(fontSize: 21),
             ),
           ],
         ),

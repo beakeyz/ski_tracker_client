@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:dadjoke_client/constants/api_endpoints.dart';
-import 'package:dadjoke_client/constants/colors.dart';
-import 'package:dadjoke_client/core/api_calls.dart';
-import 'package:dadjoke_client/core/models/DataEntry.dart';
-import 'package:dadjoke_client/core/models/DataList.dart';
-import 'package:dadjoke_client/core/models/LocalStorage.dart';
-import 'package:dadjoke_client/core/updates/StateUpdater.dart';
-import 'package:dadjoke_client/main.dart';
-import 'package:dadjoke_client/widgets/list_entry.dart';
-import 'package:dadjoke_client/widgets/updates/StateUpdateWidget.dart';
+import 'package:skitracker_client/constants/api_endpoints.dart';
+import 'package:skitracker_client/constants/colors.dart';
+import 'package:skitracker_client/core/api_calls.dart';
+import 'package:skitracker_client/core/models/DataEntry.dart';
+import 'package:skitracker_client/core/models/DataList.dart';
+import 'package:skitracker_client/core/models/LocalStorage.dart';
+import 'package:skitracker_client/core/updates/StateUpdater.dart';
+import 'package:skitracker_client/main.dart';
+import 'package:skitracker_client/widgets/list_entry.dart';
+import 'package:skitracker_client/widgets/updates/StateUpdateWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -23,11 +23,11 @@ class ListScreen extends StatefulWidget {
 
 class _ListScreenState extends State<ListScreen> {
   DataList? _entries = null;
-  bool no_internet = false;
+  bool noInternet = false;
 
   void setInternet(bool internet) {
     setState(() {
-      no_internet = internet;
+      noInternet = internet;
     });
   }
 

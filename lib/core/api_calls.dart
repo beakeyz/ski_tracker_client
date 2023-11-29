@@ -1,8 +1,6 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:dadjoke_client/core/models/Settings.dart';
-import 'package:dadjoke_client/main.dart';
-import 'package:flutter/material.dart';
+import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/main.dart';
 import 'package:http/http.dart' as http;
 import 'StateLock.dart';
 
@@ -17,25 +15,20 @@ class ApiUtils {
     try {
       Setting? setting = SettingVars.getByName("Server hostname");
       if (setting != null && setting is StringSetting) {
-        String new_val = setting.value;
-        print("NEW" + new_val);
-        print("BASE" + BASE_URL);
+        String newVal = setting.value;
 
-        checkHostForConnection(new_val, (worked) {
+        checkHostForConnection(newVal, (worked) {
           if (worked) {
-            print("worked");
             App.hasServer = true;
             callback(true);
             return;
           }
-          print("didnt work");
           App.hasServer = false;
           callback(false);
         });
       }
       
     } catch (e) {
-      print(e);
       App.hasServer = false;
       callback(false);
     }
@@ -51,11 +44,9 @@ class ApiUtils {
     try {
       final result = await InternetAddress.lookup(url);
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        print('connected');
         callback(true);
       } 
     } on SocketException catch (_) {
-      print('not connected');
       callback(false);
     }
     lock.releaseStateLock();
@@ -74,8 +65,6 @@ class ApiUtils {
         callback(true);
       });
     } catch (e) {
-      print('not connected');
-      print(e);
       callback(false);
     }
     lock.releaseStateLock();
@@ -107,12 +96,9 @@ class ApiUtils {
           break;
         default:
           await http.get(Uri.http(BASE_URL, path)).then((res) => callback(res));
-          print("btw, u didnt specify a valid method -_-");
       }
       return;
     } catch (e) {
-      print("fuck");
-      print(e.toString());
       errCallback?.call();
     }
     errCallback?.call();
@@ -132,8 +118,6 @@ class ApiUtils {
 
         await http.post(Uri.http(BASE_URL, path), body: _body, headers: _headers).then((res) => callback(res));
       } catch (e) {
-        print("fuck");
-        print(e.toString());
         errCallback?.call();
       }
     });

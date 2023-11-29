@@ -1,4 +1,4 @@
-import 'package:dadjoke_client/constants/colors.dart';
+import 'package:skitracker_client/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomCheckBox extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:dadjoke_client/constants/colors.dart';
+import 'package:skitracker_client/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -13,13 +13,13 @@ enum InfoBoxInfoType {
 }
 
 
-num getPositionAttribute(InfoBoxInfoType type, Position p) {
-  
+num getPositionAttribute(InfoBoxInfoType type, Position p) 
+{  
   switch (type) {
     case InfoBoxInfoType.HEIGHT:
       return p.altitude;
     case InfoBoxInfoType.SPEED:
-      return p.speed;
+      return (p.speed.abs().round());
     case InfoBoxInfoType.LAT:
       return p.latitude;
     case InfoBoxInfoType.LON:
@@ -40,14 +40,14 @@ class PositionInfoBox extends StatefulWidget {
   final Future<Object?>? updateFunction;
   final Position? data;
 
-  PositionInfoBox({super.key, required this.title, required this.type, this.updateFunction, this.data, this.updateRate = 60});
+  const PositionInfoBox({super.key, required this.title, required this.type, this.updateFunction, this.data, this.updateRate = 60});
 
   @override
   State<PositionInfoBox> createState() => _PositionInfoBoxState();
 }
 
 class _PositionInfoBoxState extends State<PositionInfoBox> {
-  bool has_data = false;
+  bool hasData = false;
 
   @override
   void initState() {
@@ -55,9 +55,9 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
     super.initState();
   }
 
-  void setHasData(bool has_data) {
+  void setHasData(bool hasData) {
     setState(() {
-      this.has_data = has_data;      
+      this.hasData = hasData;      
     });
   }
 
@@ -88,10 +88,7 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
                   // TODO: Handle this case.
                   break;
                 case ConnectionState.waiting:
-                  // TODO: Handle this case.
-                  return Container(
-                    child: Text("Loading..."),
-                  ); 
+                  return const Text("Loading..."); 
                 case ConnectionState.active:
                   // TODO: Handle this case.
                   break;
@@ -107,17 +104,13 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
                   }
     
               }
-              return Container(
-                child: Text("..."),
-              ); 
+              return const Text("..."); 
             })
           ) : LayoutBuilder(builder: (context, contraints) {
             if (widget.data != null) {
               num attribute = getPositionAttribute(widget.type, widget.data!);
 
-              return Container(
-                child: Text("${widget.title}: $attribute"),
-              );
+              return Text("${widget.title}: $attribute");
             }
             return const Text("No data!");
             
