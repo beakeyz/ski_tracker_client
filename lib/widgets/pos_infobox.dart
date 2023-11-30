@@ -13,24 +13,24 @@ enum InfoBoxInfoType {
 }
 
 
-num getPositionAttribute(InfoBoxInfoType type, Position p) 
+String getPositionAttribute(InfoBoxInfoType type, Position p) 
 {  
   switch (type) {
     case InfoBoxInfoType.HEIGHT:
-      return p.altitude;
+      return "${p.altitude.round().toString()} m";
     case InfoBoxInfoType.SPEED:
-      return (p.speed.abs().round());
+      return "${(p.speed.abs().round())} km/h";
     case InfoBoxInfoType.LAT:
-      return p.latitude;
+      return p.latitude.toString();
     case InfoBoxInfoType.LON:
-      return p.longitude;
+      return p.longitude.toString();
     case InfoBoxInfoType.HEADING:
-      return p.heading;
+      return p.heading.toString();
     case InfoBoxInfoType.DISTANCE_TRACKED:
       //TODO: compute distance
   }
 
-  return 0;
+  return "N/A";
 }
 
 class PositionInfoBox extends StatefulWidget {
@@ -96,7 +96,7 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
                   Position? pos = snapshot.data as Position?;
     
                   if (pos != null) {
-                    num data = getPositionAttribute(widget.type, pos);
+                    String data = getPositionAttribute(widget.type, pos);
     
                     return Container(
                       child: Text("${widget.title}: $data"),
@@ -108,7 +108,7 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
             })
           ) : LayoutBuilder(builder: (context, contraints) {
             if (widget.data != null) {
-              num attribute = getPositionAttribute(widget.type, widget.data!);
+              String attribute = getPositionAttribute(widget.type, widget.data!);
 
               return Text("${widget.title}: $attribute");
             }

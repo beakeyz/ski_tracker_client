@@ -28,9 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   double upDistance = 0;
   double downDistance = 0;
   double lastAltitude = 0;
+  double distanceTrackedMetres = 0;
   bool isTracking = false;
   int lastTrackTime = 0;
-  int distanceTrackedMetres = 0;
   DateTime? trackStartTime;
   Position? currentPosition;
   StreamSubscription<Position>? currentPositionSubscription;
@@ -75,20 +75,19 @@ class _MainScreenState extends State<MainScreen> {
           if (altitudeDelta > 0) {
             upDistance += altitudeDelta;
           } else {
-            downDistance += altitudeDelta;
+            downDistance += altitudeDelta.abs();
           }
         }
-
-        lastAltitude = event.altitude;
-        lastTrackTime = event.timestamp.millisecond;
       });
 
       if (isTracking) {
         // only do meaningful things with the data once we are tracking
-
         double deltatimeSeconds = deltaTime / 1000;
         distanceTrackedMetres += (event.speed * deltatimeSeconds).toInt();
       }
+    
+      lastAltitude = event.altitude;
+      lastTrackTime = event.timestamp.millisecond;
     },);
 
     currentPositionSubscription?.resume();
@@ -135,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
     try {
       String time = DateUtils.dateOnly(trackStartTime!).toString().split(" ")[0];
       double maxSpeedKmU = (maxSpeed * 3.6);
-      int distanceMetres = distanceTrackedMetres;
+      int distanceMetres = distanceTrackedMetres.toInt();
 
       // NOTE: We are NOT going to trust the client about what the index is, so this will be a funny number =)
       // We ARE going to trust the user with the strings it sends (for now)
