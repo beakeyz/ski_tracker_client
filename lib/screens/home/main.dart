@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
 
     currentPositionSubscription ??= Geolocator.getPositionStream(locationSettings: const LocationSettings()).listen((event) {
 
-      final int deltaTime = event.timestamp.millisecond - lastTrackTime;
+      final int deltaTime = event.timestamp.millisecondsSinceEpoch - lastTrackTime;
 
       // sadly we do have to rerender on every location update =(
       setState(() {
@@ -81,13 +81,13 @@ class _MainScreenState extends State<MainScreen> {
         
         if (isTracking) {
           // only do meaningful things with the data once we are tracking
-          double deltatimeSeconds = deltaTime / 1000;
+          double deltatimeSeconds = deltaTime.toDouble() / 1000.toDouble();
           distanceTrackedMetres += (event.speed * deltatimeSeconds);
         }
       });
     
       lastAltitude = event.altitude;
-      lastTrackTime = event.timestamp.millisecond;
+      lastTrackTime = event.timestamp.millisecondsSinceEpoch;
     },);
 
     currentPositionSubscription?.resume();
