@@ -78,13 +78,13 @@ class _MainScreenState extends State<MainScreen> {
             downDistance += altitudeDelta.abs();
           }
         }
+        
+        if (isTracking) {
+          // only do meaningful things with the data once we are tracking
+          double deltatimeSeconds = deltaTime / 1000;
+          distanceTrackedMetres += (event.speed * deltatimeSeconds);
+        }
       });
-
-      if (isTracking) {
-        // only do meaningful things with the data once we are tracking
-        double deltatimeSeconds = deltaTime / 1000;
-        distanceTrackedMetres += (event.speed * deltatimeSeconds).toInt();
-      }
     
       lastAltitude = event.altitude;
       lastTrackTime = event.timestamp.millisecond;
@@ -183,6 +183,18 @@ class _MainScreenState extends State<MainScreen> {
                     title: "Speed",
                     type: InfoBoxInfoType.SPEED,
                     data: currentPosition,
+                  ),
+                ],
+              ),
+              Flex(
+                direction: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PositionInfoBox(
+                    title: "Distance",
+                    type: InfoBoxInfoType.DISTANCE_TRACKED,
+                    distance: distanceTrackedMetres,
                   ),
                 ],
               ),

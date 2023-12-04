@@ -12,38 +12,56 @@ enum InfoBoxInfoType {
 
 }
 
-
-String getPositionAttribute(InfoBoxInfoType type, Position p) 
-{  
-  switch (type) {
-    case InfoBoxInfoType.HEIGHT:
-      return "${p.altitude.round().toString()} m";
-    case InfoBoxInfoType.SPEED:
-      return "${(p.speed.abs().round())} km/h";
-    case InfoBoxInfoType.LAT:
-      return p.latitude.toString();
-    case InfoBoxInfoType.LON:
-      return p.longitude.toString();
-    case InfoBoxInfoType.HEADING:
-      return p.heading.toString();
-    case InfoBoxInfoType.DISTANCE_TRACKED:
-      //TODO: compute distance
-  }
-
-  return "N/A";
-}
-
 class PositionInfoBox extends StatefulWidget {
   final String title;
   final InfoBoxInfoType type;
   final double updateRate;
   final Future<Object?>? updateFunction;
   final Position? data;
+  final double? distance;
 
-  const PositionInfoBox({super.key, required this.title, required this.type, this.updateFunction, this.data, this.updateRate = 60});
+  const PositionInfoBox({super.key, required this.title, required this.type, this.updateFunction, this.data, this.distance, this.updateRate = 60});
 
   @override
   State<PositionInfoBox> createState() => _PositionInfoBoxState();
+
+  String getPositionAttribute(InfoBoxInfoType type) 
+  {
+    switch (type) {
+      case InfoBoxInfoType.HEIGHT:
+        if (data == null) {
+          break;
+        }
+        return "${data!.altitude.round().toString()} m";
+      case InfoBoxInfoType.SPEED:
+        if (data == null) {
+          break;
+        }
+        return "${(data!.speed.abs().round())} km/h";
+      case InfoBoxInfoType.LAT:
+        if (data == null) {
+          break;
+        }
+        return data!.latitude.toString();
+      case InfoBoxInfoType.LON:
+        if (data == null) {
+          break;
+        }
+        return data!.longitude.toString();
+      case InfoBoxInfoType.HEADING:
+        if (data == null) {
+          break;
+        }
+        return data!.heading.toString();
+      case InfoBoxInfoType.DISTANCE_TRACKED:
+        if (distance == null) {
+          break;
+        }
+        return "${distance.toString()} m";
+    }
+
+    return "N/A";
+  }
 }
 
 class _PositionInfoBoxState extends State<PositionInfoBox> {
@@ -71,49 +89,19 @@ class _PositionInfoBoxState extends State<PositionInfoBox> {
           minWidth: MediaQuery.of(context).size.width / 2 - 100,
         ),
         child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 5),
           height: 55,
           decoration: const BoxDecoration(
             color: SECONDARY_COLOR,
             borderRadius: BorderRadius.all(
-              Radius.circular(16)
+              Radius.circular(9)
             )
           ),
           alignment: Alignment.center,
-          child: (widget.updateFunction != null) ? FutureBuilder(
-            future: widget.updateFunction,
-            builder: ((context, snapshot) {
-              switch (snapshot.connectionState){
-                case ConnectionState.none:
-                  // TODO: Handle this case.
-                  break;
-                case ConnectionState.waiting:
-                  return const Text("Loading..."); 
-                case ConnectionState.active:
-                  // TODO: Handle this case.
-                  break;
-                case ConnectionState.done:
-                  Position? pos = snapshot.data as Position?;
-    
-                  if (pos != null) {
-                    String data = getPositionAttribute(widget.type, pos);
-    
-                    return Container(
-                      child: Text("${widget.title}: $data"),
-                    );
-                  }
-    
-              }
-              return const Text("..."); 
-            })
-          ) : LayoutBuilder(builder: (context, contraints) {
-            if (widget.data != null) {
-              String attribute = getPositionAttribute(widget.type, widget.data!);
+          child: LayoutBuilder(builder: (context, contraints) {
+            String attribute = widget.getPositionAttribute(widget.type);
 
-              return Text("${widget.title}: $attribute");
-            }
-            return const Text("No data!");
-            
+            return Text("${widget.title}: $attribute");
           },),
         ),
       ),
