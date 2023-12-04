@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:skitracker_client/core/models/DataEntry.dart';
 import 'package:skitracker_client/core/models/DataList.dart';
 import 'package:skitracker_client/core/res/JsonFileManager.dart';
 
-import '../res/FileManager.dart';
 
 class LocalStorage extends JsonFileManager {
   static const String PATH = "storage.json";
@@ -42,9 +40,9 @@ class LocalStorage extends JsonFileManager {
       loadStorage((list) {
         list ??= DataList(list: [], size: 0);
 
-        DataEntry _entry = entry;
-        _entry.index = list.size;
-        list.list.add(_entry);
+        DataEntry entry0 = entry;
+        entry0.index = list.size;
+        list.list.add(entry0);
         list.size++;
 
         String jsonString = jsonEncode(list);
@@ -62,12 +60,12 @@ class LocalStorage extends JsonFileManager {
     DataEntry? removedEntry;
 
     try {
-      loadStorage((_list) {
-        if (_list == null) {
+      loadStorage((list) {
+        if (list == null) {
           return false;
         }
 
-        list = _list;
+        list = list;
 
         if (index >= list.size) {
           return false;

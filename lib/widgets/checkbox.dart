@@ -33,7 +33,7 @@ class _CustomCheckBoxState extends State<CustomCheckBox> {
           )
         ],
       ),
-      child: Icon(Icons.check_circle, color: PRIMARY_COLOR, size: 24),
+      child: const Icon(Icons.check_circle, color: PRIMARY_COLOR, size: 24),
     );
   }
 }

@@ -1,10 +1,7 @@
 import 'package:skitracker_client/constants/api_endpoints.dart';
 import 'package:skitracker_client/core/api_calls.dart';
-import 'package:skitracker_client/main.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 
 class ScreenSwitcher {
   static void gotoScreen(

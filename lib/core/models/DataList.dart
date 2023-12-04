@@ -1,5 +1,4 @@
 import 'package:skitracker_client/core/models/DataEntry.dart';
-import 'package:skitracker_client/widgets/list_entry.dart';
 
 class DataList {
   List<DataEntry> list;

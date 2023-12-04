@@ -3,7 +3,6 @@ import 'package:skitracker_client/constants/main_screens.dart';
 import 'package:skitracker_client/core/models/LocalStorage.dart';
 import 'package:skitracker_client/core/screen_switcher.dart';
 import 'package:skitracker_client/screens/home.dart';
-import 'package:skitracker_client/screens/home/lists.dart';
 import 'package:skitracker_client/widgets/button.dart';
 import 'package:skitracker_client/widgets/list_entry.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +120,7 @@ class _ListFocusState extends State<ListFocus> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width - 20,
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

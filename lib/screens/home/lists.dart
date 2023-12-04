@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:skitracker_client/constants/api_endpoints.dart';
-import 'package:skitracker_client/constants/colors.dart';
 import 'package:skitracker_client/core/api_calls.dart';
-import 'package:skitracker_client/core/models/DataEntry.dart';
 import 'package:skitracker_client/core/models/DataList.dart';
 import 'package:skitracker_client/core/models/LocalStorage.dart';
 import 'package:skitracker_client/core/updates/StateUpdater.dart';
@@ -22,7 +20,7 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
-  DataList? _entries = null;
+  DataList? _entries;
   bool noInternet = false;
 
   void setInternet(bool internet) {
@@ -37,12 +35,12 @@ class _ListScreenState extends State<ListScreen> {
 
     print("loading the lists...");
     if (App.hasServer) {
-      ApiUtils.makeRequest(GET_JOKES, "get", (res) {
+      ApiUtils.makeRequest(GET_JOKES, "get", (responseRaw) {
         // Api method
 
-        Response _res = res;
-        print(_res.headers);
-        var jokes = jsonDecode(_res.body);
+        Response res = responseRaw;
+        print(res.headers);
+        var jokes = jsonDecode(res.body);
         DataList dummy = DataList.fromJson(jokes);
         //print(dummy.size);
         if (dummy.size == _entries?.size) {

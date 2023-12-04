@@ -1,10 +1,8 @@
-import 'dart:ffi';
 
 import 'package:skitracker_client/constants/colors.dart';
 import 'package:skitracker_client/core/models/Settings.dart';
 import 'package:skitracker_client/widgets/checkbox.dart';
 import 'package:skitracker_client/widgets/input_field.dart';
-import 'package:skitracker_client/widgets/slider.dart';
 import 'package:flutter/material.dart';
 
 class SettingView extends StatefulWidget {
@@ -60,7 +58,7 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
   Widget build(BuildContext context) {
     if (widget.settingField is StringSetting) {
       StringSetting setting = widget.settingField;
-        return Container(
+        return SizedBox(
           height: 75,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -144,7 +142,7 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
                 height: 1,
                 width: MediaQuery.of(context).size.width - 80,
                 child: Container(
-                  color: Color.fromARGB(176, 133, 132, 132),
+                  color: const Color.fromARGB(176, 133, 132, 132),
                 ),
               ),
             ],
@@ -166,17 +164,17 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
               activeColor: FOREGROUND_COLOR,
               inactiveColor: SECONDARY_COLOR,
               value: (setting.value).toDouble(),
-              onChanged: (new_value) {
+              onChanged: (newValue) {
                 if (setting.value is int) {
                   setState(() {
-                    setting.value = new_value.toInt();
+                    setting.value = newValue.toInt();
                   });
                 } else {
                   setState(() {
-                    setting.value = (new_value);
+                    setting.value = (newValue);
                   });
                 }
-                print("${new_value}");
+                print("$newValue");
                 print("${setting.value}");
               },
               min: setting.minValue.toDouble(),

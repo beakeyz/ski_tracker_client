@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:skitracker_client/constants/colors.dart';
 import 'package:skitracker_client/core/models/DataEntry.dart';
 import 'package:skitracker_client/core/screen_switcher.dart';
 import 'package:skitracker_client/screens/home/list_focus.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_bounce/flutter_bounce.dart';
 
 class ListEntry extends StatefulWidget {
   final DataEntry dataEntry;
-  ListEntry({Key? key, required this.dataEntry}) : super(key: key);
+  const ListEntry({Key? key, required this.dataEntry}) : super(key: key);
 
   @override
   State<ListEntry> createState() => _ListEntryState();
@@ -48,7 +47,7 @@ class _ListEntryState extends State<ListEntry> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Flexible(child: Container()),
-                Container(
+                SizedBox(
                   width: MediaQuery.of(context).size.width - 100,
                   child: Text(
                     widget.dataEntry.date,

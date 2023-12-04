@@ -113,10 +113,10 @@ class ApiUtils {
           throw Exception("yikes");
         }
         // Just to be clear on what elements we are using in the post constructor
-        Map<String, String>? _headers = headers;
-        Object? _body = body;
+        Map<String, String>? headers0 = headers;
+        Object? body0 = body;
 
-        await http.post(Uri.http(BASE_URL, path), body: _body, headers: _headers).then((res) => callback(res));
+        await http.post(Uri.http(BASE_URL, path), body: body0, headers: headers0).then((res) => callback(res));
       } catch (e) {
         errCallback?.call();
       }

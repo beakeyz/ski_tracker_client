@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:skitracker_client/constants/api_endpoints.dart';
 import 'package:skitracker_client/constants/colors.dart';
@@ -23,9 +22,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isWaiting = false;
 
-  void updateWaiting(bool new_val) {
+  void updateWaiting(bool newVal) {
     setState(() {
-      isWaiting = new_val;
+      isWaiting = newVal;
     });
   }
 

@@ -57,7 +57,7 @@ class JsonFileManager extends FileManager {
                 loadedSetting = SliderSetting.fromJson(_loadedSetting);
                 if (loadedSetting is SliderSetting) {
                   loadedSetting.maxValue = (setting as SliderSetting).maxValue;
-                  loadedSetting.minValue = (setting as SliderSetting).minValue;
+                  loadedSetting.minValue = (setting).minValue;
                 }
                 break;
               case -1:
