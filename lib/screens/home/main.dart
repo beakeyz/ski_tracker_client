@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:skitracker_client/core/models/DataEntry.dart';
 import 'package:skitracker_client/core/models/LocalStorage.dart';
 import 'package:skitracker_client/core/models/Settings.dart';
+import 'package:skitracker_client/core/tracker.dart';
 import 'package:skitracker_client/widgets/button.dart';
 import 'package:skitracker_client/widgets/pos_infobox.dart';
 import 'package:flutter/material.dart';
@@ -27,13 +28,9 @@ class _MainScreenState extends State<MainScreen> {
   double maxSpeed = 0;
   double upDistance = 0;
   double downDistance = 0;
-  double lastAltitude = 0;
   double distanceTrackedMetres = 0;
-  bool isTracking = false;
-  int lastTrackTime = 0;
   DateTime? trackStartTime;
   Position? currentPosition;
-  StreamSubscription<Position>? currentPositionSubscription;
 
   void setResponseText(String newString) {
     if (newString.isEmpty) {
@@ -47,50 +44,24 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void updatePositionData(Tracker t) 
+  {
+    setState(() {
+      maxSpeed = t.maxSpeed;
+      upDistance = t.upDistance;
+      downDistance = t.downDistance;
+      distanceTrackedMetres = t.distanceTrackedMetres;
+      
+      trackStartTime = t.trackStartTime;
+      currentPosition = t.currentPosition;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
 
-    currentPositionSubscription ??= Geolocator.getPositionStream(locationSettings: const LocationSettings()).listen((event) {
-
-      final int deltaTime = event.timestamp.millisecondsSinceEpoch - lastTrackTime;
-
-      // sadly we do have to rerender on every location update =(
-      setState(() {
-        trackStartTime ??= event.timestamp;
-
-        if (isTracking) {
-          trackStartTime = event.timestamp;
-        }
-
-        if (event.speed > maxSpeed) {
-          maxSpeed = event.speed;
-        }
-        currentPosition = event;
-
-        if (lastAltitude != 0) {
-          double altitudeDelta = event.altitude - lastAltitude;
-
-          /* Compute the total height difference throughout the track */
-          if (altitudeDelta > 0) {
-            upDistance += altitudeDelta;
-          } else {
-            downDistance += altitudeDelta.abs();
-          }
-        }
-        
-        if (isTracking) {
-          // only do meaningful things with the data once we are tracking
-          double deltatimeSeconds = deltaTime.toDouble() / 1000.toDouble();
-          distanceTrackedMetres += (event.speed * deltatimeSeconds);
-        }
-      });
-    
-      lastAltitude = event.altitude;
-      lastTrackTime = event.timestamp.millisecondsSinceEpoch;
-    },);
-
-    currentPositionSubscription?.resume();
+    gTracker!.setPosUpdateFunc(updatePositionData);
   }
 
   @override
@@ -98,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
     //summaryController.dispose();
 
-    currentPositionSubscription?.pause();
+    gTracker!.setPosUpdateFunc(null);
   }
 
   void processTrackToServer() {
@@ -212,7 +183,7 @@ class _MainScreenState extends State<MainScreen> {
                     return;
                   }
 
-                  if (isTracking) {
+                  if (gTracker!.isTracking) {
                     // stop tracking and save tracked info
                     processTrackLocally();
                     trackStartTime = null;
@@ -220,13 +191,13 @@ class _MainScreenState extends State<MainScreen> {
                     // start tracking so that we save position info and compute it
                   }
                   setState(() {
-                    isTracking = !isTracking;
+                    gTracker!.isTracking = !gTracker!.isTracking;
                   });
                 },
                 child: Text(
                   trackStartTime == null ?
                     "Can't start tracking yet!" : 
-                    (isTracking ? 
+                    (gTracker!.isTracking ? 
                       "Tracking..." :
                       "Tap to start tracking!"
                       )

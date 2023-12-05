@@ -57,7 +57,7 @@ class PositionInfoBox extends StatefulWidget {
         if (distance == null) {
           break;
         }
-        return "${distance.toString()} m";
+        return "${distance!.round().toString()} m";
     }
 
     return "N/A";

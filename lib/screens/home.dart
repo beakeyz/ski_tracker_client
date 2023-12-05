@@ -1,3 +1,4 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:skitracker_client/constants/colors.dart';
 import 'package:skitracker_client/constants/main_screens.dart';
 import 'package:skitracker_client/core/screen_switcher.dart';
@@ -66,6 +67,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: const Icon(Icons.wifi_off_rounded, size: 25),
                   )
                 : const SizedBox(),
+            !App.hasLocationAlways
+                ? InkWell(
+                  onTap: () {
+                      Permission.locationAlways.request().then((value) {
+                        setState(() {
+                          App.hasLocationAlways = value.isGranted;
+                        });
+                      });
+                    },
+                  child: const Icon(Icons.access_alarm_rounded, size: 25),
+                ) : const SizedBox(),
             Flexible(child: Container()),
             InkWell(
               onTap: () {

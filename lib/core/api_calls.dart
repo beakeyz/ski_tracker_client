@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:skitracker_client/core/models/Settings.dart';
 import 'package:skitracker_client/main.dart';
 import 'package:http/http.dart' as http;
-import 'StateLock.dart';
+import 'state_lock.dart';
 
 class ApiUtils {
   // Im just gonna trust this never changes. I know this is bad practise, but fuck you 🤡

@@ -15,6 +15,7 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const Main(
       hasInternet: false,
+      hasLocationAlways: false,
     ));
 
     // Verify that our counter starts at 0.

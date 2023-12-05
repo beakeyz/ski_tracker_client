@@ -4,9 +4,12 @@ import 'package:skitracker_client/constants/colors.dart';
 import 'package:skitracker_client/core/api_calls.dart';
 import 'package:skitracker_client/core/models/Settings.dart';
 import 'package:skitracker_client/core/res/JsonFileManager.dart';
+import 'package:skitracker_client/core/tracker.dart';
 import 'package:skitracker_client/core/updates/StateUpdater.dart';
 import 'package:skitracker_client/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 
 void main() {
   // first things first, lets load settings
@@ -39,22 +42,45 @@ void main() {
     activateStateUpdateWidgets(null);
   });
 
+  /* Create the tracker instance */
+  gTracker = Tracker();
+
+  /* Also start the tracker */
+  gTracker!.startTracker();
+
   ApiUtils.checkForConnection((has) {
-    runApp(
-      Main(
-        hasInternet: has as bool,
-      ),
-    );
+
+    Permission.locationAlways.isGranted.then( (isGranted) async {
+      
+      PermissionStatus? s;
+
+      if (isGranted == false) {
+        s = await Permission.locationAlways.request();
+      }
+
+      App.hasLocationAlways = s == null? isGranted : s.isGranted;
+
+      runApp(
+        Main(
+          hasInternet: has as bool,
+          hasLocationAlways: App.hasLocationAlways,
+        ),
+      );  
+    });
   });
 }
 
 class App {
   static bool hasServer = true;
+  static bool hasLocationAlways = false;
 }
 
 class Main extends StatelessWidget {
+  /* TODO: remove */
   final bool hasInternet;
-  const Main({Key? key, required this.hasInternet}) : super(key: key);
+  /* TODO: remove */
+  final bool hasLocationAlways;
+  const Main({Key? key, required this.hasInternet, required this.hasLocationAlways}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
