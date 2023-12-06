@@ -1,42 +1,48 @@
-import 'dart:async';
-import 'package:geolocator/geolocator.dart';
+
+import 'package:location/location.dart';
 
 class DataFetcher {
 
-  static Future<Position?> getPhysicalDevicePosition() async {
-    bool service = await Geolocator.isLocationServiceEnabled();
-    print("Started fetch");
+  static Future<LocationData?> getPhysicalDevicePosition() async {
+    PermissionStatus perm = await Location.instance.hasPermission();
+    bool service;
+
+    service = await Location.instance.serviceEnabled();
+
+    /* Check if we have location services */
     if (!service) {
-      print("no service");
-      return null;
+      service = await Location.instance.requestService();
+
+      if (!service) {
+        return null;
+      }
     }
 
-    LocationPermission locationPermission = await Geolocator.checkPermission();
+    /* Check if we have location permissions */
+    switch (perm) {
+      case PermissionStatus.denied:
+      case PermissionStatus.deniedForever:
+        perm = await Location.instance.requestPermission();
 
-    switch (locationPermission) {
-      case LocationPermission.denied:
-        LocationPermission perm = await Geolocator.requestPermission();
-
-        //could not type the or opperator while writing this -_-
-        if (perm == LocationPermission.always) {
-          return DataFetcher.getPhysicalDevicePosition();
+        if (perm != PermissionStatus.granted) {
+          return null;
         }
-        if (perm == LocationPermission.whileInUse) {
-          return DataFetcher.getPhysicalDevicePosition();
-        }
-        return null;
-      case LocationPermission.deniedForever:
-      print("no perms 2");
-
-        return null;
-      case LocationPermission.unableToDetermine:
-      print("no perms 4");
-        return null;
-      case LocationPermission.whileInUse:
-      case LocationPermission.always:
-        return await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high
-        );
+        break;
+      default:
+        break;
     }
+
+    /* Check if we have a persistant location permission */
+    service = await Location.instance.isBackgroundModeEnabled();
+
+    if (!service) {
+      service = await Location.instance.enableBackgroundMode();
+
+      if (!service) {
+        return null;
+      }
+    }
+
+    return await Location.instance.getLocation();
   }
 }

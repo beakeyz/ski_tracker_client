@@ -7,7 +7,7 @@ import 'package:skitracker_client/core/tracker.dart';
 import 'package:skitracker_client/widgets/button.dart';
 import 'package:skitracker_client/widgets/pos_infobox.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class MainScreen extends StatefulWidget {
 
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   double downDistance = 0;
   double distanceTrackedMetres = 0;
   DateTime? trackStartTime;
-  Position? currentPosition;
+  LocationData? currentPosition;
 
   void setResponseText(String newString) {
     if (newString.isEmpty) {
@@ -51,8 +51,6 @@ class _MainScreenState extends State<MainScreen> {
       upDistance = t.upDistance;
       downDistance = t.downDistance;
       distanceTrackedMetres = t.distanceTrackedMetres;
-      
-      trackStartTime = t.trackStartTime;
       currentPosition = t.currentPosition;
     });
   }
@@ -101,7 +99,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void processTrackLocally() {
-
     try {
       String time = DateUtils.dateOnly(trackStartTime!).toString().split(" ")[0];
       double maxSpeedKmU = (maxSpeed * 3.6);
@@ -123,7 +120,9 @@ class _MainScreenState extends State<MainScreen> {
         setState(() {
         });
       });
-    } catch(_) {}
+    } catch(_) {
+      print("FAILED TO PROCESS TRACK LOCALLY");
+    }
   }
 
   @override
@@ -178,28 +177,28 @@ class _MainScreenState extends State<MainScreen> {
               ),
               Button(
                 callback: () {
-                  /* Don't track if the geolocator is not yet online */
-                  if (trackStartTime == null) {
+
+                  if (gTracker!.canStartTracking == false) {
                     return;
                   }
 
                   if (gTracker!.isTracking) {
                     // stop tracking and save tracked info
+                    trackStartTime = gTracker!.trackStartTime;
                     processTrackLocally();
-                    trackStartTime = null;
-                  } else {
-                    // start tracking so that we save position info and compute it
                   }
+
+                  /* Do the toggle */
                   setState(() {
-                    gTracker!.isTracking = !gTracker!.isTracking;
+                    gTracker!.toggleTracker();
                   });
                 },
                 child: Text(
-                  trackStartTime == null ?
+                  gTracker!.canStartTracking == false ?
                     "Can't start tracking yet!" : 
                     (gTracker!.isTracking ? 
-                      "Tracking..." :
-                      "Tap to start tracking!"
+                      "Tracking (Tap again to stop)" :
+                      "Tap to start tracking"
                       )
                 ),
               ),

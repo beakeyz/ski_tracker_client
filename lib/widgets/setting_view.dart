@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 class SettingView extends StatefulWidget {
 
-  dynamic settingField;
-  SettingView({Key? key, required this.settingField}) : super(key: key);
+  final dynamic settingField;
+  const SettingView({Key? key, required this.settingField}) : super(key: key);
 
   @override
   State<SettingView> createState() => _SettingViewState();
@@ -28,7 +28,6 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
   @override
   void initState() {
     super.initState();
-    print("create");
     animationController = AnimationController(duration: const Duration(milliseconds: 50), vsync: this);
 
     if (widget.settingField is StringSetting) {
@@ -83,10 +82,8 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
           setState(() {
             setting.value = !setting.value;
             if (setting.value) {
-              print("Turned it on");
               animationController.forward();
             } else {
-              print("Turned it off");
               animationController.reverse();
             }
           });
@@ -151,37 +148,37 @@ class _SettingViewState extends State<SettingView> with SingleTickerProviderStat
       );
     } else if (widget.settingField is SliderSetting) {
       SliderSetting setting = widget.settingField;
-      return Container(
-        child: Column(
-          children: [
-            Text(
-              "${setting.name}: ${setting.value}",
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+      return Column(
+        children: [
+          Text(
+            "${setting.name}: ${setting.value}",
+            style: const TextStyle(
+              fontSize: 16,
             ),
-            Slider(
-              activeColor: FOREGROUND_COLOR,
-              inactiveColor: SECONDARY_COLOR,
-              value: (setting.value).toDouble(),
-              onChanged: (newValue) {
-                if (setting.value is int) {
-                  setState(() {
-                    setting.value = newValue.toInt();
-                  });
-                } else {
-                  setState(() {
-                    setting.value = (newValue);
-                  });
-                }
-                print("$newValue");
-                print("${setting.value}");
-              },
-              min: setting.minValue.toDouble(),
-              max: setting.maxValue.toDouble(),
-            ),
-          ],
-        ),
+          ),
+          Slider(
+            activeColor: FOREGROUND_COLOR,
+            inactiveColor: SECONDARY_COLOR,
+            value: (setting.value).toDouble(),
+            onChanged: (newValue) async {
+              if (setting.value is int) {
+                setState(() {
+                  setting.value = newValue.toInt();
+                });
+              } else {
+                setState(() {
+                  setting.value = (newValue);
+                });
+              }
+
+              if (setting.onChanged != null) {
+                await setting.onChanged!(setting);
+              }
+            },
+            min: setting.minValue.toDouble(),
+            max: setting.maxValue.toDouble(),
+          ),
+        ],
       );
       //return CustomSlider(minValue: setting.minValue, maxValue: setting.maxValue, defaultValue: setting.value, child: widget);
     }

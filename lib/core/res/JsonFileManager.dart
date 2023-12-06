@@ -31,15 +31,14 @@ class JsonFileManager extends FileManager {
   void fetchSettings (Function callback) {
     loadFromFile(SettingVars.SETTINGS_FILE, (value) {
       if (value == null) {
-        print("Could not load settings from json!");
         // TODO: write default settings
-        callback(SettingVars.DefaultSettings);
+        callback(SettingVars.defaultSettings);
         return;
       }
-      print("returning funnie");
+
       List<Setting> ret = [];
 
-      for (Setting setting in SettingVars.DefaultSettings) {
+      for (Setting setting in SettingVars.defaultSettings) {
         bool foundThisSetting = false;
         for (var _loadedSetting in value) {
           Setting loadedSetting = EmptySetting.fromJson(_loadedSetting);
@@ -74,7 +73,7 @@ class JsonFileManager extends FileManager {
           ret.add(setting);
         }
       }
-      print("DEBUG: returned json-backed settings");
+      
       callback(ret);
     });
   }

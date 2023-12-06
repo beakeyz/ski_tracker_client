@@ -16,10 +16,6 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
-    for (var set in SettingVars.Settings) {
-      print(set);
-      print(SettingVars.Settings.length);
-    }
     return Scaffold(
         appBar: AppBar(
           centerTitle: false,
@@ -48,64 +44,61 @@ class _SettingsScreenState extends State<SettingsScreen> {
           shadowColor: SECONDARY_COLOR,
           backgroundColor: BACKGROUND_COLOR,
         ),
-        body: Container(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: SettingVars.Settings.length,
-                  itemBuilder: (context, index) {
-                    print(SettingVars.Settings.length);
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 10,
-                      ),
-                      child: SettingView(settingField: SettingVars.Settings[index]),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  color: SECONDARY_COLOR,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(185, 117, 107, 118),
-                      blurRadius: 15,
-                      spreadRadius: 0,
-                      blurStyle: BlurStyle.outer
-                    )
-                  ],
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                child: Button(
-                  callback: () {
-                    // TODO save
-                    SettingVars.save();
-                    ApiUtils.verifyHost((res) {
-                      if (res) {
-                        Setting? host = SettingVars.getByName("Server hostname");
-                        if (host != null && host is StringSetting) {
-                          ApiUtils.setHost(host.value);
-                        }
-                      }
-                    });
-                  },
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(
-                      fontFamily: "Open Sans",
-                      fontSize: 16,
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: SettingVars.settings.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 10,
                     ),
+                    child: SettingView(settingField: SettingVars.settings[index]),
+                  );
+                },
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                color: SECONDARY_COLOR,
+                boxShadow: [
+                  BoxShadow(
+                    color: Color.fromARGB(185, 117, 107, 118),
+                    blurRadius: 15,
+                    spreadRadius: 0,
+                    blurStyle: BlurStyle.outer
+                  )
+                ],
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+              child: Button(
+                callback: () {
+                  // TODO save
+                  SettingVars.save();
+                  ApiUtils.verifyHost((res) {
+                    if (res) {
+                      Setting? host = SettingVars.getByName("Server hostname");
+                      if (host != null && host is StringSetting) {
+                        ApiUtils.setHost(host.value);
+                      }
+                    }
+                  });
+                },
+                child: const Text(
+                  "Save",
+                  style: TextStyle(
+                    fontFamily: "Open Sans",
+                    fontSize: 16,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:skitracker_client/core/res/FileManager.dart';
 import 'package:flutter/material.dart';
+import 'package:skitracker_client/core/tracker.dart';
 
 const String _Setting_json_name_str = "SettingName";
 
@@ -76,16 +77,24 @@ class SliderSetting extends Setting {
   num maxValue;
   num value;
 
-  SliderSetting(super.name, super.type, this.minValue, this.maxValue, this.value);
+  Function(SliderSetting)? onChanged;
+
+  SliderSetting(super.name, super.type, this.minValue, this.maxValue, this.value, this.onChanged);
 
   factory SliderSetting.fromJson(Map<String, dynamic> json) {
     if (json['Type'].toString() != SLIDER_SETTING_TYPE.toString()) {
-      return SliderSetting("NULL", -1, -1, -1, -1);
+      return SliderSetting("NULL", -1, -1, -1, -1, null);
     }
-    return SliderSetting(json[_Setting_json_name_str], json['Type'], json['MinValue'], json['MaxValue'], json['Value']);
+    return SliderSetting(
+      json[_Setting_json_name_str],
+      json['Type'],
+      json['MinValue'],
+      json['MaxValue'],
+      json['Value'],
+      SettingVars.getCallbackFor(json[_Setting_json_name_str])
+    );
   }
 
-  @override
   Map<String, dynamic> toJson() => {
         'SettingName': name,
         'Type': type,
@@ -98,18 +107,18 @@ class SliderSetting extends Setting {
 class SettingVars {
   static const String SETTINGS_FILE = "settings.json";
 
-  static List<Setting> DefaultSettings = [
+  static List<Setting> defaultSettings = [
     BoolSetting("I know what i'm doing", BOOL_SETTING_TYPE, false),
     StringSetting("Server hostname", STRING_SETTING_TYPE, "192.168.0.45:4000"),
-    SliderSetting("Frequency", SLIDER_SETTING_TYPE, 1.0, 10.0, 1),
+    SliderSetting("Frequency", SLIDER_SETTING_TYPE, 100, 1000, 250, trackerUpdateFrequency),
     BoolSetting("One more time", BOOL_SETTING_TYPE, true),
     BoolSetting("or not", BOOL_SETTING_TYPE, true),
   ];
 
-  static List<Setting> Settings = [];
+  static List<Setting> settings = [];
 
   static dynamic getByName(String name) {
-    for (Setting s in Settings) {
+    for (Setting s in settings) {
       if (s.name == name) {
         return s;
       }
@@ -117,9 +126,24 @@ class SettingVars {
     return null;
   }
 
+  static Function(SliderSetting)? getCallbackFor(String settingName)
+  {
+    Setting? setting;
+    SliderSetting sliderSetting;
+
+    setting = SettingVars.getByName(settingName);
+
+    if (setting == null || setting is! SliderSetting) {
+      return null;
+    }
+
+    sliderSetting = setting;
+
+    return sliderSetting.onChanged;
+  }
+
   static dynamic fromJson(dynamic input){
     EmptySetting setting = EmptySetting.fromJson(input);
-    print(setting.type.toString());
     switch (setting.type) {
       case -1:
         return null;
@@ -135,7 +159,7 @@ class SettingVars {
   }
 
   static void save() {
-    for (Setting setting in Settings) {
+    for (Setting setting in settings) {
       if (setting is StringSetting) {
         StringSetting s = setting;
         s.value = s.editingController!.text;
@@ -143,7 +167,7 @@ class SettingVars {
     }
 
     FileManager m = FileManager();
-    String jsonString = jsonEncode(Settings);
+    String jsonString = jsonEncode(settings);
     m.write(SETTINGS_FILE, jsonString);
   }
 }

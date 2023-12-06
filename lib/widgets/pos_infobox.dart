@@ -1,6 +1,6 @@
+import 'package:location/location.dart';
 import 'package:skitracker_client/constants/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 
 enum InfoBoxInfoType {
   HEIGHT,
@@ -17,7 +17,7 @@ class PositionInfoBox extends StatefulWidget {
   final InfoBoxInfoType type;
   final double updateRate;
   final Future<Object?>? updateFunction;
-  final Position? data;
+  final LocationData? data;
   final double? distance;
 
   const PositionInfoBox({super.key, required this.title, required this.type, this.updateFunction, this.data, this.distance, this.updateRate = 60});
@@ -27,36 +27,38 @@ class PositionInfoBox extends StatefulWidget {
 
   String getPositionAttribute(InfoBoxInfoType type) 
   {
+
+    if (data == null) {
+      return "N/A";
+    }
+
     switch (type) {
       case InfoBoxInfoType.HEIGHT:
-        if (data == null) {
+        if (data!.altitude == null) {
           break;
         }
-        return "${data!.altitude.round().toString()} m";
+        return "${data!.altitude!.round().toString()} m";
       case InfoBoxInfoType.SPEED:
-        if (data == null) {
+        if (data!.speed == null) {
           break;
         }
-        return "${(data!.speed.abs().round())} km/h";
+        return "${(data!.speed!.abs().round())} km/h";
       case InfoBoxInfoType.LAT:
         if (data == null) {
           break;
         }
         return data!.latitude.toString();
       case InfoBoxInfoType.LON:
-        if (data == null) {
+        if (data!.longitude == null) {
           break;
         }
-        return data!.longitude.toString();
+        return data!.longitude!.toString();
       case InfoBoxInfoType.HEADING:
-        if (data == null) {
+        if (data!.heading == null) {
           break;
         }
-        return data!.heading.toString();
+        return data!.heading!.toString();
       case InfoBoxInfoType.DISTANCE_TRACKED:
-        if (distance == null) {
-          break;
-        }
         return "${distance!.round().toString()} m";
     }
 
