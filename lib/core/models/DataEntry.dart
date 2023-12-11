@@ -10,10 +10,21 @@ class DataEntry {
   double downDistance;
 
   double maxSpeed;
+  double trackTimeSec;
   String date;
   int index;
 
-  DataEntry({required this.horizontalDistance, required this.upDistance, required this.downDistance, required this.maxSpeed, required this.date, required this.index});
+  DataEntry(
+    {
+      required this.horizontalDistance,
+      required this.upDistance,
+      required this.downDistance,
+      required this.maxSpeed,
+      required this.date,
+      required this.trackTimeSec,
+      required this.index
+    }
+  );
 
   DataEntry.fromJson(Map<String, dynamic> json)
       : horizontalDistance = json['HoriDistance'],
@@ -21,6 +32,7 @@ class DataEntry {
         downDistance = json['DownDistance'],
         maxSpeed = json['MaxSpeed'],
         date = json['Date'],
+        trackTimeSec = json['TrackTime'],
         index = json['Index'];
 
   Map<String, dynamic> toJson() => {
@@ -29,6 +41,7 @@ class DataEntry {
         'DownDistance' : downDistance,
         'MaxSpeed': maxSpeed,
         'Date': date,
+        'TrackTime': trackTimeSec,
         'Index': index,
       };
 }

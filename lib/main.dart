@@ -44,23 +44,24 @@ void main() {
     activateStateUpdateWidgets(null);
   });
 
-  ApiUtils.checkForConnection((has) {
-    DataFetcher.getPhysicalDevicePosition().then((position) {
+  print("Checkin perms");
 
-      /* Create the tracker instance */
-      gTracker = Tracker();
+  DataFetcher.getPhysicalDevicePosition().then((position) {
 
-      runApp(
-        Main(
-          initError: (position == null),
-        ),
-      );
+    print("Starting thjing"); 
+    /* Create the tracker instance */
+    gTracker = Tracker();
 
-      App.hasFinish = true;
-    });
+    print("Starcking app");
+
+    runApp(
+      Main(
+        initError: (position == null),
+      ),
+    );
+
+    App.hasFinish = true;
   });
-
-  while (App.hasFinish == false) {}
 }
 
 class App {

@@ -2,14 +2,11 @@ import 'dart:io';
 import 'package:skitracker_client/core/models/Settings.dart';
 import 'package:skitracker_client/main.dart';
 import 'package:http/http.dart' as http;
-import 'state_lock.dart';
 
 class ApiUtils {
   // Im just gonna trust this never changes. I know this is bad practise, but fuck you 🤡
   static const String BACKUP_BASE_URL = "10.0.2.2:4000";
   static String BASE_URL = "localhost:4000";
-
-  static StateLock lock = StateLock();
 
   static void verifyHost(Function callback) async {
     try {
@@ -39,8 +36,7 @@ class ApiUtils {
   }
 
   static void checkUrlForConnection(String url, Function callback) async {
-    if (!lock.aquireStateLock()) return;
-
+    
     try {
       final result = await InternetAddress.lookup(url);
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
@@ -49,7 +45,6 @@ class ApiUtils {
     } on SocketException catch (_) {
       callback(false);
     }
-    lock.releaseStateLock();
   }
 
   
@@ -58,7 +53,6 @@ class ApiUtils {
   }
 
   static void checkHostForConnection(String url, Function callback) async {
-    if (!lock.aquireStateLock()) return;
     //TODO
     try {
       await http.get(Uri.http(url, "/")).then((result) {
@@ -67,15 +61,10 @@ class ApiUtils {
     } catch (e) {
       callback(false);
     }
-    lock.releaseStateLock();
   }
 
   //TODO clean this ABSOLUTE SHITHEAP up, ty
   static void makeRequest(String path, String method, Function callback, Function? errCallback) async {
-    if (!lock.aquireStateLock()){
-      errCallback?.call();
-      return;
-    }
     try {
       switch (method) {
         case "Get":
@@ -102,11 +91,9 @@ class ApiUtils {
       errCallback?.call();
     }
     errCallback?.call();
-    lock.releaseStateLock();
   }
 
   static void postRequest(String path, bool https, Object? body, Map<String, String>? headers, Function callback, Function? errCallback) async {
-    if (!lock.aquireStateLock()) return;
     verifyHost((value) async {
       try {
         if (!value) {
@@ -121,6 +108,5 @@ class ApiUtils {
         errCallback?.call();
       }
     });
-    lock.releaseStateLock();
   }
 }

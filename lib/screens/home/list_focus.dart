@@ -140,6 +140,10 @@ class _ListFocusState extends State<ListFocus> {
                       "Downwards distance: ${widget.tag.dataEntry.downDistance.round().toString()} meters",
                       overflow: TextOverflow.clip,
                     ),
+                    Text(
+                      "Time: ${widget.tag.dataEntry.trackTimeSec.round().toString()} seconds",
+                      overflow: TextOverflow.clip,
+                    ),
                   ],
                 ),
               ),

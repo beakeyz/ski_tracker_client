@@ -45,7 +45,7 @@ class Tracker {
       accuracy: LocationAccuracy.high,
       distanceFilter: 0,
       /* This is in ms */
-      interval: 250,
+      interval: 600,
     ).then((value) {
 
       /* Register a stream handler once we've changed the settings */
@@ -56,15 +56,12 @@ class Tracker {
           return;
         }
 
-        if (lastTrackTime == 0) {
-          lastTrackTime = event.time!;
-        }
-
         if (lastAltitude == 0) {
           lastAltitude = event.altitude!;
         }
 
-        final double deltaTime = event.time! - lastTrackTime;
+        final double currentMillis = DateTime.now().millisecondsSinceEpoch.toDouble();
+        final double deltaTime = currentMillis - lastTrackTime;
 
         if (event.speed! > maxSpeed) {
           maxSpeed = event.speed!;
@@ -84,13 +81,13 @@ class Tracker {
         }
 
         // only do meaningful things with the data once we are tracking
-        double deltatimeSeconds = deltaTime.toDouble() / 1000.toDouble();
+        double deltatimeSeconds = deltaTime / 1000.toDouble();
         distanceTrackedMetres += (event.speed! * deltatimeSeconds);
 
         update();
       
         lastAltitude = event.altitude!;
-        lastTrackTime = event.time!;
+        lastTrackTime = currentMillis;
       });
     });
   }
@@ -135,6 +132,9 @@ class Tracker {
     isTracking = true;
 
     resetParams();
+
+    lastTrackTime = trackStartTime!.millisecondsSinceEpoch.toDouble();
+
     update();
   }
 

@@ -104,6 +104,8 @@ class _MainScreenState extends State<MainScreen> {
       double maxSpeedKmU = (maxSpeed * 3.6);
       int distanceMetres = distanceTrackedMetres.toInt();
 
+      int timeDelta = DateTime.now().millisecondsSinceEpoch - trackStartTime!.millisecondsSinceEpoch;
+
       // NOTE: We are NOT going to trust the client about what the index is, so this will be a funny number =)
       // We ARE going to trust the user with the strings it sends (for now)
       DataEntry entry = DataEntry(
@@ -111,6 +113,7 @@ class _MainScreenState extends State<MainScreen> {
         upDistance: upDistance,
         downDistance: downDistance,
         maxSpeed: maxSpeedKmU,
+        trackTimeSec: timeDelta / 1000,
         date: time,
         index: 69
       );
